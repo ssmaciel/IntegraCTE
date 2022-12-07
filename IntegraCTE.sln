@@ -3,20 +3,35 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraCTE.Core", "IntegraCTE.Core\IntegraCTE.Core.csproj", "{96366767-043B-4071-9DC6-0B238D36ECA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegraCTE.Core", "IntegraCTE.Core\IntegraCTE.Core.csproj", "{96366767-043B-4071-9DC6-0B238D36ECA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraCTE.API", "IntegraCTE.API\IntegraCTE.API.csproj", "{C87546CD-539E-4AA0-A291-9EC10E0BE193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraCTE.Test", "IntegraCTE.Test\IntegraCTE.Test.csproj", "{883841AA-9648-40E3-AB7A-15164119A649}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{96366767-043B-4071-9DC6-0B238D36ECA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96366767-043B-4071-9DC6-0B238D36ECA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96366767-043B-4071-9DC6-0B238D36ECA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96366767-043B-4071-9DC6-0B238D36ECA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87546CD-539E-4AA0-A291-9EC10E0BE193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87546CD-539E-4AA0-A291-9EC10E0BE193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87546CD-539E-4AA0-A291-9EC10E0BE193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87546CD-539E-4AA0-A291-9EC10E0BE193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883841AA-9648-40E3-AB7A-15164119A649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883841AA-9648-40E3-AB7A-15164119A649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883841AA-9648-40E3-AB7A-15164119A649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883841AA-9648-40E3-AB7A-15164119A649}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BBD6586A-B905-4AF9-89D9-1538CB012BD6}
 	EndGlobalSection
 EndGlobal
