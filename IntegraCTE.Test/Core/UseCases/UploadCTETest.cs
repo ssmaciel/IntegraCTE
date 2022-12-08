@@ -30,10 +30,13 @@ namespace IntegraCTE.Test.Core.UseCases
             var model = new CTEModel() { Id = Guid.NewGuid(), XML = "HAHAs" };
             var dto = new ArquivoDTO("HAHA");
 
+            // Mock Mapper
             _mocker.GetMock<IMapper>().Setup(m => m.Map<CTEModel>(dto)).Returns(model);
+            // Mock Repository
             _mocker.GetMock<IIntegraCTERepository>().Setup(s => s.AdicionarXML(model));
             _mocker.GetMock<IIntegraCTERepository>().Setup(s => s.SaveChangesAsync()).Returns(Task.FromResult(1));
 
+            // Create Instance UC
             var useCase = _mocker.CreateInstance<UploadCTE>();
 
             useCase.Execute(dto).Wait();
