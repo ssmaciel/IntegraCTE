@@ -27,7 +27,6 @@ namespace IntegraCTE.Core.UseCases
             var xmlModel = _mapper.Map<CTEModel>(arquivoDTO);
             await _commandRepository.AdicionarXML(xmlModel);
             await _commandRepository.SaveChangesAsync();
-            await _commandRepository.SaveChangesAsync();
         }
     }
 }
