@@ -13,7 +13,7 @@ namespace IntegraCTE.Core.MapProfiles
     {
         public ArquivoProfile()
         {
-            CreateMap<ArquivoDTO, CTEModel>().ReverseMap();
+            CreateMap<ArquivoDTO, ArquivoModel>().ReverseMap();
         }
     }
 }

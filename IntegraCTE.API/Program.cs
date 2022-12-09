@@ -1,4 +1,6 @@
 using AutoMapper;
+using IntegraCTE.API.Workers;
+using IntegraCTE.Core.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,8 @@ var config = new MapperConfiguration(cfg =>
 });
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton(mapper);
-//builder.Services.AddHostedService<PlanosPorUsuarioAppWorker>();
+builder.Services.AddTransient<ProcessarXMLCTE>();
+builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 var app = builder.Build();
 
