@@ -4,5 +4,6 @@ namespace IntegraCTE.Core.Model
     {
         public Guid Id { get; set; }
         public string XML { get; set; }
+        public bool Processado { get; set; }
     }
 }
