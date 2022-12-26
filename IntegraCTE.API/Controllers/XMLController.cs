@@ -19,15 +19,12 @@ namespace IntegraCTE.API.Controllers
         //[HttpPost, DisableRequestSizeLimit]
         // POST api/<XMLController>
         [HttpPost("upload")]
-        public async Task<ActionResult> Post([FromBody] string xml, [FromServices] UploadCTE uc)
+        public async Task<ActionResult> Post([FromBody] string xml, [FromServices] UploadCTE ucUploadXML, [FromServices] ProcessarXMLCTE ucProcessarXML)
         {
-            //var valueBytes = System.Convert.FromBase64String(xml);
-
-            //var ret = Encoding.UTF8.GetString(valueBytes);
             ArquivoDTO dto = new(xml);
-            await uc.Execute(dto);
+            await ucUploadXML.Execute(dto);
+            await ucProcessarXML.Execute(dto.Id);
             return Ok(xml);
-            //return Ok(ret);
         }
     }
 }

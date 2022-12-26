@@ -7,12 +7,12 @@ namespace IntegraCTE.Core.Entity
         public Guid Id { get; set; }
         public string XML { get; set; }
         public List<Nota> Notas { get; set; }
+        public Transportadora Transportadora { get; private set; }
+        public Destinatario Destinatario { get; private set; }
 
         public DateTime DataHoraCriacao { get; private set; }
 
-        public string CNPJTransportadora { get; private set; }
-
-        public string CNPJCPFDestinatario { get; private set; }
+        public string Site { get; private set; }
 
         public string CNPJRemetente { get; private set; }
 
@@ -32,11 +32,10 @@ namespace IntegraCTE.Core.Entity
 
         public DateTime DataEmissao { get; private set; }
 
-        public string Xml { get; private set; }
-
         public string TomadorServico { get; private set; }
 
         public string NotaFiscal { get; private set; }
+        public string ChaveNotaFiscal { get; private set; }
 
         public string CFOP { get; private set; }
 
@@ -46,26 +45,28 @@ namespace IntegraCTE.Core.Entity
 
         public string UFRemetente { get; private set; }
 
-        #region Endereço Destinatário
-        public string DestinatarioNome { get; private set; }
-        public string DestinatarioLogradouro { get; private set; }
-        public string DestinatarioNro { get; private set; }
-        public string DestinatarioBairro { get; private set; }
-        public string DestinatarioCodigoMunicipio { get; private set; }
-        public string DestinatarioMunicipio { get; private set; }
-        public string DestinatarioCEP { get; private set; }
-        public string DestinatarioUF { get; private set; }
-        public string DestinatarioCodigoPais { get; private set; }
-        public string DestinatarioPais { get; private set; }
-        #endregion
-
         public void ProcessarXML()
         {
             MontarCTePorXml(XML, "CNX");
         }
 
+        public void AdicionarDadosNotas(List<dynamic> dadnosNotas)
+        {
+            var notas = dadnosNotas.Select(s => new Nota() { ChaveNotaFical = s.ChaveNotaFical, NumeroNotaFical = s.NumeroNotaFical, SerieNotaFical = s.SerieNotaFical });
+            Notas.AddRange(notas);
+        }
+
+        public void AdicionarDadosTransportadora(dynamic transportadoraResponse)
+        {
+            if (transportadoraResponse is null || string.IsNullOrEmpty(transportadoraResponse.Id) || string.IsNullOrEmpty(transportadoraResponse.Cnpj) || string.IsNullOrEmpty(transportadoraResponse.Nome)) return;
+            var transportadora = new Transportadora(transportadoraResponse.Id, transportadoraResponse.Cnpj, transportadoraResponse.Nome);
+            this.Transportadora = transportadora;
+        }
+
         private void MontarCTePorXml(string xml, string dataArea)
         {
+            var destinatario = new Destinatario();
+            Transportadora transportadora;
             if (!xml.Contains("cteProc"))
             {
                 return;
@@ -89,8 +90,9 @@ namespace IntegraCTE.Core.Entity
 
                 foreach (XmlElement emit in dadosemitente)
                 {
-                    CNPJTransportadora = emit.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
-
+                    var cnpjTransportadora = emit.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
+                    transportadora = new Transportadora(cnpjTransportadora);
+                    Transportadora = transportadora;
                     foreach (var endEmit in emit.GetElementsByTagName("enderEmit"))
                     {
                         UFEmitente = emit.GetElementsByTagName("UF")[0].InnerText.Trim();
@@ -100,12 +102,12 @@ namespace IntegraCTE.Core.Entity
                 try
                 {
                     foreach (XmlElement dest in dadosdestinatario)
-                        CNPJCPFDestinatario = dest.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
+                        destinatario.CNPJCPF = dest.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
                 }
                 catch
                 {
                     foreach (XmlElement dest in dadosdestinatario)
-                        CNPJCPFDestinatario = dest.GetElementsByTagName("CPF")[0].InnerText.Trim();
+                        destinatario.CNPJCPF = dest.GetElementsByTagName("CPF")[0].InnerText.Trim();
                 }
 
                 foreach (XmlElement reme in dadosremetente)
@@ -141,13 +143,13 @@ namespace IntegraCTE.Core.Entity
                         TomadorServico = tomador4.GetElementsByTagName("toma")[0].InnerText.Trim();
                         try
                         {
-                            CNPJCPFDestinatario = tomador4.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
+                            destinatario.CNPJCPF = tomador4.GetElementsByTagName("CNPJ")[0].InnerText.Trim();
                         }
                         catch (Exception ex)
                         {
                             if (dataArea?.ToUpper() == "CNX")
                             {
-                                CNPJCPFDestinatario = tomador4.GetElementsByTagName("CPF")[0].InnerText.Trim();
+                                destinatario.CNPJCPF = tomador4.GetElementsByTagName("CPF")[0].InnerText.Trim();
                             }
                             else
                             {
@@ -173,11 +175,11 @@ namespace IntegraCTE.Core.Entity
                 if (TomadorServico == "0")
                     CNPJEntidadeLegal = CNPJRemetente;
                 else if (TomadorServico == "1")
-                    CNPJEntidadeLegal = CNPJTransportadora;
+                    CNPJEntidadeLegal = this.Transportadora.Cnpj;
                 else if (TomadorServico == "3")
-                    CNPJEntidadeLegal = CNPJCPFDestinatario;
+                    CNPJEntidadeLegal = destinatario.CNPJCPF;
                 else if (TomadorServico == "4")
-                    CNPJEntidadeLegal = CNPJCPFDestinatario;
+                    CNPJEntidadeLegal = destinatario.CNPJCPF;
 
                 foreach (XmlElement infDoc in dadosinfDoc)
                 {
@@ -187,7 +189,10 @@ namespace IntegraCTE.Core.Entity
                         foreach (XmlElement chaveAcesso in chavesAcessoNfe)
                         {
                             NotaFiscal += $"{chaveAcesso.InnerText.Trim()}{(chavesAcessoNfe.Count == 1 ? string.Empty : " - ")}";
+                            ChaveNotaFiscal += $"{chaveAcesso.InnerText.Trim()}{(chavesAcessoNfe.Count == 1 ? string.Empty : ",")}";
                         }
+                        var notas = ChaveNotaFiscal.Split(",").Select(s => new Nota() { ChaveNotaFical = s });
+                        Notas.AddRange(notas);
                     }
                 }
 
@@ -203,23 +208,24 @@ namespace IntegraCTE.Core.Entity
                 }
 
                 #region Endereço Destinatário
-                foreach (XmlElement destinatario in dadosdestinatario)
+                foreach (XmlElement destinatarioXML in dadosdestinatario)
                 {
-                    DestinatarioNome = destinatario.GetElementsByTagName("xNome")[0].InnerText.Trim();
+                    destinatario.Nome = destinatarioXML.GetElementsByTagName("xNome")[0].InnerText.Trim();
 
-                    foreach (XmlElement endDestinatario in destinatario.GetElementsByTagName("enderDest"))
+                    foreach (XmlElement endDestinatario in destinatarioXML.GetElementsByTagName("enderDest"))
                     {
-                        DestinatarioLogradouro = endDestinatario.GetElementsByTagName("xLgr")[0]?.InnerText.Trim();
-                        DestinatarioNro = endDestinatario.GetElementsByTagName("nro")[0]?.InnerText.Trim();
-                        DestinatarioBairro = endDestinatario.GetElementsByTagName("xBairro")[0]?.InnerText.Trim();
-                        DestinatarioCodigoMunicipio = endDestinatario.GetElementsByTagName("cMun")[0]?.InnerText.Trim();
-                        DestinatarioMunicipio = endDestinatario.GetElementsByTagName("xMun")[0]?.InnerText.Trim();
-                        DestinatarioCEP = endDestinatario.GetElementsByTagName("CEP")[0]?.InnerText.Trim();
-                        DestinatarioUF = endDestinatario.GetElementsByTagName("UF")[0]?.InnerText.Trim();
-                        DestinatarioCodigoPais = endDestinatario.GetElementsByTagName("cPais")[0]?.InnerText.Trim();
-                        DestinatarioPais = endDestinatario.GetElementsByTagName("xPais")[0]?.InnerText.Trim();
+                        destinatario.Logradouro = endDestinatario.GetElementsByTagName("xLgr")[0]?.InnerText.Trim();
+                        destinatario.Nro = endDestinatario.GetElementsByTagName("nro")[0]?.InnerText.Trim();
+                        destinatario.Bairro = endDestinatario.GetElementsByTagName("xBairro")[0]?.InnerText.Trim();
+                        destinatario.CodigoMunicipio = endDestinatario.GetElementsByTagName("cMun")[0]?.InnerText.Trim();
+                        destinatario.Municipio = endDestinatario.GetElementsByTagName("xMun")[0]?.InnerText.Trim();
+                        destinatario.CEP = endDestinatario.GetElementsByTagName("CEP")[0]?.InnerText.Trim();
+                        destinatario.UF = endDestinatario.GetElementsByTagName("UF")[0]?.InnerText.Trim();
+                        destinatario.CodigoPais = endDestinatario.GetElementsByTagName("cPais")[0]?.InnerText.Trim();
+                        destinatario.Pais = endDestinatario.GetElementsByTagName("xPais")[0]?.InnerText.Trim();
                     }
                 }
+                Destinatario = destinatario;
                 #endregion
             }
             catch (Exception ex)
