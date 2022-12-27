@@ -13,7 +13,6 @@ namespace IntegraCTE.Core.Repository
         Task Adicionar(CTEModel cteModel);
         Task<ArquivoModel> BuscarArquivoCTE(Guid id);
         Task<IEnumerable<Guid>> BuscarArquivosCTENProcessados();
-        Task<CTEModel> BuscarCTE(Guid id);
         Task<int> SaveChangesAsync();
     }
 }

@@ -1,30 +1,30 @@
-using AutoMapper;
 using IntegraCTE.Core.DTO;
 using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
-using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
 
 namespace IntegraCTE.Core.UseCases
 {
     public class IntegrarCTE
     {
-        private readonly IIntegraCTERepository _repository;
-        private readonly IMapper _mapper;
-        private readonly IERPService _service;
+        private dynamic _queryRepository;
+        private dynamic _commandRepository;
+        private dynamic _mapper;
+        private IERPService _erpService;
 
-        public IntegrarCTE(IIntegraCTERepository queryRepository, IMapper mapper, IERPService erpService)
+        public IntegrarCTE(dynamic queryRepository, dynamic commandRepository, dynamic mapper, IERPService erpService)
         {
-            _repository = queryRepository;
+            _queryRepository = queryRepository;
+            _commandRepository = commandRepository;
             _mapper = mapper;
-            _service = erpService;
+            _erpService = erpService;
         }
 
         public async Task Execute(Guid id)
         {
-            var cteModel = await _repository.BuscarCTE(id);
+            var cteModel = await _queryRepository.BuscarCTE(id);
             var cte = _mapper.Map<CTE>(cteModel);
-            await _service.EnviarCTE(cte);
+            await _erpService.EnviarCTE(cte);
         }
     }
 }
