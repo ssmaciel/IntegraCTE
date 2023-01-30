@@ -1,6 +1,9 @@
 using AutoMapper;
 using IntegraCTE.API.Workers;
+using IntegraCTE.Core.Context;
 using IntegraCTE.Core.UseCases;
+using IntegraCTE.Infra.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,22 @@ var config = new MapperConfiguration(cfg =>
 });
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddDbContext<IIntegraCTEContext, IntegraCTEContext>(o =>
+{
+    o.UseSqlServer(builder.Configuration.GetConnectionString("CTEConnection"), p =>
+    {
+        p.EnableRetryOnFailure(
+             maxRetryCount: 2,
+             maxRetryDelay: TimeSpan.FromSeconds(5),
+             errorNumbersToAdd: null)
+         .MigrationsHistoryTable("EFHistory_IntegraCTE");
+
+    });
+    o.EnableDetailedErrors();
+    o.EnableSensitiveDataLogging();
+}, ServiceLifetime.Transient);
+
 builder.Services.AddTransient<ProcessarXMLCTE>();
 builder.Services.AddHostedService<WorkerProcessamentoXML>();
 

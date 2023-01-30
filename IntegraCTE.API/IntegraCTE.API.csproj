@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IntegraCTE.Core\IntegraCTE.Core.csproj" />
+    <ProjectReference Include="..\IntegraCTE.Infra\IntegraCTE.Infra.csproj" />
   </ItemGroup>
 
 </Project>
