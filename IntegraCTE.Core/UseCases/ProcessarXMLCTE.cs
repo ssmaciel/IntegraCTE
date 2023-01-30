@@ -26,9 +26,24 @@ namespace IntegraCTE.Core.UseCases
             var cte = _mapper.Map<CTE>(arquivoModel);
             cte.ProcessarXML();
             var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.ChaveNotaFiscal);
-            var transportadoraResponse = await _service.BuscarDadosTrasnportadoraPorCNPJ(cte.Transportadora.Cnpj);
             cte.AdicionarDadosNotas(dadosNotas);
-            cte.AdicionarDadosTransportadora(transportadoraResponse);
+
+            dynamic transportadora = new { };
+            var transportadoraModel = await _repository.BuscarTransportadoraPorCNPJ(cte.Transportadora.Cnpj);
+            if (transportadoraModel == null)
+            {
+                var transportadoraResponse = await _service.BuscarDadosTrasnportadoraPorCNPJ(cte.Transportadora.Cnpj);
+                // VALIDAR TRANSPORTADORA EXISTE
+                transportadora = transportadoraResponse;
+                transportadoraModel = new TransportadoraModel(Guid.NewGuid(), transportadoraResponse.CNPJ, transportadoraResponse.Nome);
+                await _repository.Adicionar(transportadoraModel);
+            }
+            else
+            {
+                transportadora = transportadoraModel;
+            }
+
+            cte.AdicionarDadosTransportadora(transportadora);
             var cteModel = _mapper.Map<CTEModel>(cte);
             arquivoModel.Processado = true;
             await _repository.Adicionar(cteModel);
