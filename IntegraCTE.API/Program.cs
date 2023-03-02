@@ -1,8 +1,12 @@
 using AutoMapper;
 using IntegraCTE.API.Workers;
 using IntegraCTE.Core.Context;
+using IntegraCTE.Core.Repository;
+using IntegraCTE.Core.Services;
 using IntegraCTE.Core.UseCases;
 using IntegraCTE.Infra.Context;
+using IntegraCTE.Infra.Repository;
+using IntegraCTE.Infra.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,8 +41,14 @@ builder.Services.AddDbContext<IIntegraCTEContext, IntegraCTEContext>(o =>
     o.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
 
+builder.Services.AddHttpClient<ODataJson>();
+
+
+builder.Services.AddTransient<IIntegraCTERepository, IntegraCTERepository>();
+builder.Services.AddTransient<IERPService, ERPService>();
+
 builder.Services.AddTransient<ProcessarXMLCTE>();
-builder.Services.AddHostedService<WorkerProcessamentoXML>();
+// builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 var app = builder.Build();
 

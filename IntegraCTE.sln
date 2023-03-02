@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegraCTE.API", "IntegraCT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegraCTE.Test", "IntegraCTE.Test\IntegraCTE.Test.csproj", "{883841AA-9648-40E3-AB7A-15164119A649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegraCTE.Infra", "IntegraCTE.Infra\IntegraCTE.Infra.csproj", "{04F7D5B6-6C94-460F-9BA5-EB49875E4EA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegraCTE.Infra", "IntegraCTE.Infra\IntegraCTE.Infra.csproj", "{04F7D5B6-6C94-460F-9BA5-EB49875E4EA7}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D0E9BF9C-1D3F-4F68-9EEC-FBB2FDC1031E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{04F7D5B6-6C94-460F-9BA5-EB49875E4EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04F7D5B6-6C94-460F-9BA5-EB49875E4EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04F7D5B6-6C94-460F-9BA5-EB49875E4EA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0E9BF9C-1D3F-4F68-9EEC-FBB2FDC1031E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0E9BF9C-1D3F-4F68-9EEC-FBB2FDC1031E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0E9BF9C-1D3F-4F68-9EEC-FBB2FDC1031E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0E9BF9C-1D3F-4F68-9EEC-FBB2FDC1031E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

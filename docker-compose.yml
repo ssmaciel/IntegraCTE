@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  integracte.api:
+    image: ${DOCKER_REGISTRY-}integracteapi
+    build:
+      context: .
+      dockerfile: IntegraCTE.API/Dockerfile
