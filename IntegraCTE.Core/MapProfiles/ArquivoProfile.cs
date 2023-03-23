@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IntegraCTE.Core.DTO;
+using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace IntegraCTE.Core.MapProfiles
         public ArquivoProfile()
         {
             CreateMap<ArquivoDTO, ArquivoModel>().ReverseMap();
+            CreateMap<CTE, ArquivoModel>().ReverseMap();
+            CreateMap<CTE, CTEModel>().ReverseMap();
         }
     }
 }

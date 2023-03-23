@@ -47,6 +47,7 @@ namespace IntegraCTE.Core.Entity
 
         public void ProcessarXML()
         {
+            Notas = new List<Nota>();
             MontarCTePorXml(XML, "CNX");
         }
 

@@ -64,17 +64,20 @@ namespace IntegraCTE.Infra.Context
             return await base.SaveChangesAsync();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //optionsBuilder.UseNpgsql("Host=db-postgresql-nyc3-05245-do-user-9173221-0.b.db.ondigitalocean.com;Port=25060;Pooling=true;Database=defaultdb;User Id=doadmin;Password=th9uqlerl7nx2qxc;Ssl Mode=Require;Trust Server Certificate=true;", p =>
-            //{
-            //    p.EnableRetryOnFailure(
-            //         maxRetryCount: 2,
-            //         maxRetryDelay: TimeSpan.FromSeconds(5),
-            //         errorCodesToAdd: null)
-            //    .MigrationsHistoryTable("EFHistory_BoletoSimples");
-            //});
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=localhost;Database=IntegraCteDB;user id=sa;password=Password_01", p =>
+        //    {
+        //        p.EnableRetryOnFailure(
+        //             maxRetryCount: 2,
+        //             maxRetryDelay: TimeSpan.FromSeconds(5),
+        //             errorNumbersToAdd: null)
+        //         .MigrationsHistoryTable("EFHistory_IntegraCTE");
+
+        //    });
+        //    optionsBuilder.EnableDetailedErrors();
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(IntegraCTEContext).Assembly);

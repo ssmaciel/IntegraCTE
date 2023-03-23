@@ -11,7 +11,7 @@ namespace IntegraCTE.Infra.Configuration
             builder.ToTable("Arquivos");
             builder.HasKey(p => p.Id);
 
-            builder.Property(x => x.XML).HasColumnType("XML").IsRequired();
+            builder.Property(x => x.XML).HasColumnType("VARCHAR(MAX)").IsRequired();
             builder.Property(x => x.Processado).HasDefaultValue(false);
 
         }
