@@ -22,9 +22,12 @@ namespace IntegraCTE.Infra.Services
             _oData = oData;
         }
 
-        public Task<List<dynamic>> BuscarDadosNotasPorChavesIN(string chaveNotaFiscal)
+        public async Task<ListFiscalDocumentEntity_PTR> BuscarDadosNotasPorChavesIN(string chaveNotaFiscal)
         {
-            throw new NotImplementedException();
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "FiscalDocumentEntity_PTR", Params = $"&$filter=dataAreaId eq 'CNX' and AccessKey in ({chaveNotaFiscal})" };
+            var cte = await _oData.Lookup<ListFiscalDocumentEntity_PTR>(oDataRequest.EntityName, oDataRequest.Params);
+            return cte;
+            //throw new NotImplementedException();
         }
 
         public Task<dynamic> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora)

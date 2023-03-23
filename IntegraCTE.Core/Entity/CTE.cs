@@ -1,3 +1,4 @@
+using IntegraCTE.Core.DTO;
 using System.Xml;
 
 namespace IntegraCTE.Core.Entity
@@ -51,7 +52,7 @@ namespace IntegraCTE.Core.Entity
             MontarCTePorXml(XML, "CNX");
         }
 
-        public void AdicionarDadosNotas(List<dynamic> dadnosNotas)
+        public void AdicionarDadosNotas(List<NotaDTO> dadnosNotas)
         {
             var notas = dadnosNotas.Select(s => new Nota() { ChaveNotaFical = s.ChaveNotaFical, NumeroNotaFical = s.NumeroNotaFical, SerieNotaFical = s.SerieNotaFical });
             Notas.AddRange(notas);

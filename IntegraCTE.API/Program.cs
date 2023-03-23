@@ -9,6 +9,7 @@ using IntegraCTE.Infra.Context;
 using IntegraCTE.Infra.Repository;
 using IntegraCTE.Infra.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,11 @@ builder.Services.AddDbContext<IIntegraCTEContext, IntegraCTEContext>(o =>
     o.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
 
-builder.Services.AddHttpClient<ODataJson>();
+builder.Services.AddHttpClient<ODataJson>((op) =>
+{
+    var httpClient = new HttpClient();
+    op.BaseAddress = new Uri(builder.Configuration.GetSection("ERPService:UrlDynamics").Value);
+});
 
 
 builder.Services.AddTransient<IIntegraCTERepository, IntegraCTERepository>();

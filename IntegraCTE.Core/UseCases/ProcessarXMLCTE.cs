@@ -26,7 +26,8 @@ namespace IntegraCTE.Core.UseCases
             var cte = _mapper.Map<CTE>(arquivoModel);
             cte.ProcessarXML();
             var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.ChaveNotaFiscal);
-            cte.AdicionarDadosNotas(dadosNotas);
+            var notasDTO = _mapper.Map<List<NotaDTO>>(dadosNotas.value);
+            cte.AdicionarDadosNotas(notasDTO);
 
             dynamic transportadora = new { };
             var transportadoraModel = await _repository.BuscarTransportadoraPorCNPJ(cte.Transportadora.Cnpj);

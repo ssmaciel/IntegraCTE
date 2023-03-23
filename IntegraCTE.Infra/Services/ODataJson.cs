@@ -52,6 +52,7 @@ namespace IntegraCTE.Infra.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             try
             {
+                await configureClient();
                 var str = await _httpClient.GetFromJsonAsync<T>($"data/{Entity}?cross-company=true{param}");
                 return str;
             }
@@ -101,10 +102,10 @@ namespace IntegraCTE.Infra.Services
 
             try
             {
-                string aadClientAppId  = _configuration.GetSection("aadClientAppId").Value;
-                string aadClientSecret = _configuration.GetSection("aadClientSecret").Value;
-                string aadResource     = _configuration.GetSection("aadResource").Value;
-                string aadTenant       = _configuration.GetSection("aadTenant").Value;
+                string aadClientAppId  = _configuration.GetSection("ERPService:ClientIdDynamics").Value;
+                string aadClientSecret = _configuration.GetSection("ERPService:ClientSecret").Value;
+                string aadResource     = _configuration.GetSection("ERPService:UrlDynamics").Value;
+                string aadTenant       = _configuration.GetSection("ERPService:ActiveDirectoryTenant").Value;
 
                 AuthenticationContext authenticationContext = new AuthenticationContext(aadTenant, false);
                 AuthenticationResult authenticationResult = await authenticationContext.AcquireTokenAsync(aadResource, new ClientCredential(aadClientAppId, aadClientSecret));
