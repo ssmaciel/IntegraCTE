@@ -6,3 +6,15 @@ services:
     build:
       context: .
       dockerfile: IntegraCTE.API/Dockerfile
+    environment:
+       CTEConnection: "Server=db;Database=IntegraCteDB;user id=sa;password=Password_01"
+   
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: db
+    environment:
+      SA_PASSWORD: "Password_01"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports: 
+      - "1433:1433"

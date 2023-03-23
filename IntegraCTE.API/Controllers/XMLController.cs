@@ -2,6 +2,7 @@
 using IntegraCTE.Core.DTO;
 using IntegraCTE.Core.UseCases;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,8 +20,10 @@ namespace IntegraCTE.API.Controllers
         //[HttpPost, DisableRequestSizeLimit]
         // POST api/<XMLController>
         [HttpPost("upload")]
-        public async Task<ActionResult> Post([FromBody] string xml, [FromServices] UploadCTE ucUploadXML, [FromServices] ProcessarXMLCTE ucProcessarXML)
+        public async Task<ActionResult> Post([FromBody] string xmlbase64, [FromServices] UploadCTE ucUploadXML, [FromServices] ProcessarXMLCTE ucProcessarXML)
         {
+            byte[] bytes = Convert.FromBase64String(xmlbase64);
+            string xml = Encoding.UTF8.GetString(bytes);
             ArquivoDTO dto = new(xml);
             await ucUploadXML.Execute(dto);
             await ucProcessarXML.Execute(dto.Id);

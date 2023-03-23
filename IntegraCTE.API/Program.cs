@@ -1,6 +1,7 @@
 using AutoMapper;
 using IntegraCTE.API.Workers;
 using IntegraCTE.Core.Context;
+using IntegraCTE.Core.MapProfiles;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
 using IntegraCTE.Core.UseCases;
@@ -21,7 +22,7 @@ builder.Services.AddSwaggerGen();
 
 var config = new MapperConfiguration(cfg =>
 {
-    //cfg.AddProfile<PropostaAdesaoProfile>();
+    cfg.AddProfile<ArquivoProfile>();
 });
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -48,7 +49,10 @@ builder.Services.AddTransient<IIntegraCTERepository, IntegraCTERepository>();
 builder.Services.AddTransient<IERPService, ERPService>();
 
 builder.Services.AddTransient<ProcessarXMLCTE>();
+builder.Services.AddTransient<UploadCTE>();
 // builder.Services.AddHostedService<WorkerProcessamentoXML>();
+
+builder.Services.AddResponseCaching();
 
 var app = builder.Build();
 
