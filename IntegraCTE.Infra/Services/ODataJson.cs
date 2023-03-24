@@ -52,8 +52,12 @@ namespace IntegraCTE.Infra.Services
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             try
             {
-                await configureClient();
-                var str = await _httpClient.GetFromJsonAsync<T>($"data/{Entity}?cross-company=true{param}");
+                using var httpClient = await configureClient();
+                var str = await httpClient.GetFromJsonAsync<T>($"{_configuration.GetSection("ERPService:UrlDynamics").Value}/data/{Entity}?cross-company=true{param}");
+                //var response = await httpClient.GetAsync($"{_configuration.GetSection("ERPService:UrlDynamics").Value}/data/{Entity}?cross-company=true{param}");
+                
+                //string strs = await httpClient.GetStringAsync($"/data/{Entity}?cross-company=true{param}");
+                //var str = System.Text.Json.JsonSerializer.Deserialize<T>(strs);
                 return str;
             }
             catch (Exception ex)
@@ -89,12 +93,14 @@ namespace IntegraCTE.Infra.Services
 
         public async Task<HttpClient> configureClient()
         {
-            AuthenticationResult result = await ObterCabecalhoAutenticacao();
-            _httpClient.Timeout = TimeSpan.FromMinutes(20);  // 2 minutes  
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient httpClient = new HttpClient();
 
-            return _httpClient;
+            AuthenticationResult result = await ObterCabecalhoAutenticacao();
+            httpClient.Timeout = TimeSpan.FromMinutes(20);  // 2 minutes  
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return httpClient;
         }
 
         private async Task<AuthenticationResult> ObterCabecalhoAutenticacao(bool useWebAppAuthentication = false)

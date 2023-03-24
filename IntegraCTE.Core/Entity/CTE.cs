@@ -8,6 +8,7 @@ namespace IntegraCTE.Core.Entity
         public Guid Id { get; set; }
         public string XML { get; set; }
         public List<Nota> Notas { get; set; }
+        public Guid TransportadoraID { get; private set; }
         public Transportadora Transportadora { get; private set; }
         public Destinatario Destinatario { get; private set; }
 
@@ -56,13 +57,15 @@ namespace IntegraCTE.Core.Entity
         {
             var notas = dadnosNotas.Select(s => new Nota() { ChaveNotaFical = s.ChaveNotaFical, NumeroNotaFical = s.NumeroNotaFical, SerieNotaFical = s.SerieNotaFical });
             Notas.AddRange(notas);
+            Site = dadnosNotas[0].Estabelecimento;
         }
 
-        public void AdicionarDadosTransportadora(dynamic transportadoraResponse)
+        public void AdicionarDadosTransportadora(TransportadoraDTO transportadoraDTO)
         {
-            if (transportadoraResponse is null || string.IsNullOrEmpty(transportadoraResponse.Id) || string.IsNullOrEmpty(transportadoraResponse.Cnpj) || string.IsNullOrEmpty(transportadoraResponse.Nome)) return;
-            var transportadora = new Transportadora(transportadoraResponse.Id, transportadoraResponse.Cnpj, transportadoraResponse.Nome);
+            if (transportadoraDTO is null || transportadoraDTO.Id == Guid.Empty || string.IsNullOrEmpty(transportadoraDTO.Cnpj) || string.IsNullOrEmpty(transportadoraDTO.Nome)) return;
+            var transportadora = new Transportadora(transportadoraDTO.Id, transportadoraDTO.Cnpj, transportadoraDTO.Nome);
             this.Transportadora = transportadora;
+            TransportadoraID = transportadoraDTO.Id;
         }
 
         private void MontarCTePorXml(string xml, string dataArea)

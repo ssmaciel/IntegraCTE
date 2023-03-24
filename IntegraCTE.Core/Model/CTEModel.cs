@@ -12,7 +12,7 @@ namespace IntegraCTE.Core.Model
 
         public string ChaveAcessoCte { get; private set; }
 
-        public string OrdemCompra { get; private set; }
+        public string? OrdemCompra { get; private set; }
 
         public Guid TransportadoraID { get; set; }
         public TransportadoraModel Transportadora { get; set; }

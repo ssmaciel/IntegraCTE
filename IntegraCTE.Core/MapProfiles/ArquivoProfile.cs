@@ -3,6 +3,7 @@ using IntegraCTE.Core.DTO;
 using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Services.Model;
+using IntegraCTE.Core.Services.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,10 @@ namespace IntegraCTE.Core.MapProfiles
                 .ForMember(s => s.FiscalDocumentSeries, opt => opt.MapFrom(a => a.SerieNotaFical))
                 .ForMember(s => s.FiscalEstablishment, opt => opt.MapFrom(a => a.Estabelecimento))
                 .ReverseMap();
+            CreateMap<Transportadora, TransportadoraModel>().ReverseMap();
+            CreateMap<TransportadoraDTO, TransportadoraModel>().ReverseMap();
+            CreateMap<TransportadoraResponse, TransportadoraDTO>().ReverseMap();
+            CreateMap<TransportadoraResponse, TransportadoraModel>().ReverseMap();
         }
     }
 }

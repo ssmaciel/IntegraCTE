@@ -30,8 +30,9 @@ namespace IntegraCTE.Infra.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Cnpj = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false)
+                    Cnpj = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    CodigoExterno = table.Column<string>(type: "VARCHAR(100)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +49,7 @@ namespace IntegraCTE.Infra.Migrations
                     NumeroCte = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     SerieCte = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     ChaveAcessoCte = table.Column<string>(type: "VARCHAR(100)", nullable: false),
-                    OrdemCompra = table.Column<string>(type: "VARCHAR(100)", nullable: false),
+                    OrdemCompra = table.Column<string>(type: "VARCHAR(100)", nullable: true),
                     TransportadoraID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DestinatarioCNPJCPF = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     DestinatarioNome = table.Column<string>(type: "VARCHAR(100)", nullable: false),

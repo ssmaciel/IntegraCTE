@@ -157,7 +157,6 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("OrdemCompra")
-                        .IsRequired()
                         .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("SerieCte")
@@ -206,8 +205,12 @@ namespace IntegraCTE.Infra.Migrations
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("CodigoExterno")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

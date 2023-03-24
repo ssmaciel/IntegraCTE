@@ -45,7 +45,7 @@ builder.Services.AddDbContext<IIntegraCTEContext, IntegraCTEContext>(o =>
 
 builder.Services.AddHttpClient<ODataJson>((op) =>
 {
-    var httpClient = new HttpClient();
+    op.Timeout = TimeSpan.FromMinutes(20);
     op.BaseAddress = new Uri(builder.Configuration.GetSection("ERPService:UrlDynamics").Value);
 });
 

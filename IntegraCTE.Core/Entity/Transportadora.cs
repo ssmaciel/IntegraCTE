@@ -8,11 +8,11 @@ namespace IntegraCTE.Core.Entity
 {
     public class Transportadora
     {
-        public string Id { get; private set; }
+        public Guid Id { get; private set; }
         public string Cnpj { get; private set; }
         public string Nome { get; private set; }
 
-        public Transportadora(string id, string cnpj, string nome)
+        public Transportadora(Guid id, string cnpj, string nome)
         {
             Id = id;
             Cnpj = cnpj;
