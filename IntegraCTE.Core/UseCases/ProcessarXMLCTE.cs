@@ -25,10 +25,29 @@ namespace IntegraCTE.Core.UseCases
             var arquivoModel = await _repository.BuscarArquivoCTE(id);
             var cte = _mapper.Map<CTE>(arquivoModel);
             cte.ProcessarXML();
-            var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.ChaveNotaFiscal);
-            var transportadoraResponse = await _service.BuscarDadosTrasnportadoraPorCNPJ(cte.Transportadora.Cnpj);
-            cte.AdicionarDadosNotas(dadosNotas);
-            cte.AdicionarDadosTransportadora(transportadoraResponse);
+            var chave = $"'{cte.ChaveNotaFiscal.Remove(cte.ChaveNotaFiscal.Length-1).Replace(",", "','")}'";
+            var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.Notas);
+            var notasDTO = _mapper.Map<List<NotaDTO>>(dadosNotas.value);
+            cte.AdicionarDadosNotas(notasDTO);
+
+            TransportadoraDTO transportadoraDTO = null;
+            var transportadoraModel = await _repository.BuscarTransportadoraPorCNPJ(Convert.ToUInt64(cte.Transportadora.Cnpj).ToString("000000000000-00"));
+            if (transportadoraModel == null)
+            {
+                var transportadoraResponse = await _service.BuscarDadosTrasnportadoraPorCNPJ(cte.Transportadora.Cnpj);
+                transportadoraDTO = _mapper.Map<TransportadoraDTO>(transportadoraResponse);
+                transportadoraDTO.Id = Guid.NewGuid();
+
+                transportadoraModel = new TransportadoraModel(transportadoraDTO.Id, transportadoraDTO.Cnpj, transportadoraDTO.Nome, transportadoraDTO.CodigoExterno);
+                await _repository.Adicionar(transportadoraModel);
+            //await _repository.SaveChangesAsync();
+            }
+            else
+            {
+                transportadoraDTO = _mapper.Map<TransportadoraDTO>(transportadoraModel);
+            }
+
+            cte.AdicionarDadosTransportadora(transportadoraDTO);
             var cteModel = _mapper.Map<CTEModel>(cte);
             arquivoModel.Processado = true;
             await _repository.Adicionar(cteModel);

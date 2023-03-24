@@ -1,11 +1,15 @@
+using IntegraCTE.Core.DTO;
 using IntegraCTE.Core.Entity;
+using IntegraCTE.Core.Services.Model;
+using IntegraCTE.Core.Services.Responses;
 
 namespace IntegraCTE.Core.Services
 {
     public interface IERPService
     {
-        Task<List<dynamic>> BuscarDadosNotasPorChavesIN(string chaveNotaFiscal);
-        Task<dynamic> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora);
+        Task<ListFiscalDocumentEntity_PTR> BuscarDadosNotasPorChavesIN(List<Nota> notas);
+        Task<TransportadoraResponse> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora);
         Task EnviarCTE(CTE cte);
+        Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE();
     }
 }
