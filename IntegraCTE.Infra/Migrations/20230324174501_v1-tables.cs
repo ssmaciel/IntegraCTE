@@ -44,7 +44,7 @@ namespace IntegraCTE.Infra.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Notas = table.Column<string>(type: "VARCHAR(100)", nullable: false),
+                    Notas = table.Column<string>(type: "VARCHAR(MAX)", nullable: false),
                     Site = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     NumeroCte = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     SerieCte = table.Column<string>(type: "VARCHAR(100)", nullable: false),
@@ -70,8 +70,8 @@ namespace IntegraCTE.Infra.Migrations
                     Justificativa = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     DataEmissao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TomadorServico = table.Column<string>(type: "VARCHAR(100)", nullable: false),
-                    NotaFiscal = table.Column<string>(type: "VARCHAR(100)", nullable: false),
-                    ChaveNotaFiscal = table.Column<string>(type: "VARCHAR(100)", nullable: false),
+                    NotaFiscal = table.Column<string>(type: "VARCHAR(MAX)", nullable: false),
+                    ChaveNotaFiscal = table.Column<string>(type: "VARCHAR(MAX)", nullable: false),
                     CFOP = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     UFEnv = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     UFEmitente = table.Column<string>(type: "VARCHAR(100)", nullable: false),

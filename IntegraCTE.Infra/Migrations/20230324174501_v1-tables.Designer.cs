@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegraCTE.Infra.Migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    [Migration("20230324021303_v1-tables")]
+    [Migration("20230324174501_v1-tables")]
     partial class v1tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +77,7 @@ namespace IntegraCTE.Infra.Migrations
 
                     b.Property<string>("ChaveNotaFiscal")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<DateTime>("DataArquivo")
                         .HasColumnType("datetime2");
@@ -148,11 +148,11 @@ namespace IntegraCTE.Infra.Migrations
 
                     b.Property<string>("NotaFiscal")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("Notas")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("NumeroCte")
                         .IsRequired()

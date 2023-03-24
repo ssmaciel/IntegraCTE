@@ -10,6 +10,9 @@ namespace IntegraCTE.Infra.Configuration
         {
             builder.ToTable("CTEs");
             builder.HasKey(p => p.Id);
+            builder.Property(x => x.ChaveNotaFiscal).HasColumnType("VARCHAR(MAX)");
+            builder.Property(x => x.NotaFiscal).HasColumnType("VARCHAR(MAX)");
+            builder.Property(x => x.Notas).HasColumnType("VARCHAR(MAX)");
 
             builder.HasOne(x => x.Transportadora).WithMany(x => x.CTEs)
         .OnDelete(DeleteBehavior.Restrict);

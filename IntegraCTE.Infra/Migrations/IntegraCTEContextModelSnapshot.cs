@@ -75,7 +75,7 @@ namespace IntegraCTE.Infra.Migrations
 
                     b.Property<string>("ChaveNotaFiscal")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<DateTime>("DataArquivo")
                         .HasColumnType("datetime2");
@@ -146,11 +146,11 @@ namespace IntegraCTE.Infra.Migrations
 
                     b.Property<string>("NotaFiscal")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("Notas")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("NumeroCte")
                         .IsRequired()
