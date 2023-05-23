@@ -9,7 +9,7 @@ namespace IntegraCTE.Core.Services
     {
         Task<ListFiscalDocumentEntity_PTR> BuscarDadosNotasPorChavesIN(List<Nota> notas);
         Task<TransportadoraResponse> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora);
-        Task EnviarCTE(CTE cte);
+        Task EnviarCTE(CTERequest cte);
         Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE();
     }
 }

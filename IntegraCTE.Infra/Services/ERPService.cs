@@ -41,13 +41,14 @@ namespace IntegraCTE.Infra.Services
 
         public async Task<TransportadoraResponse> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora)
         {
-            ODataRequest oDataRequest = new ODataRequest { EntityName = "VendorsV2", Params = $"&$filter=dataAreaId eq 'CNX' and BrazilianCNPJOrCPF eq '{Convert.ToUInt64(cNPJTransportadora).ToString("000000000000-00")}'" };
+            var cnpjTransportadoraFormat = Convert.ToUInt64(cNPJTransportadora).ToString("000000000000-00");
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "VendorsV2", Params = $"&$filter=dataAreaId eq 'CNX' and BrazilianCNPJOrCPF eq '{cnpjTransportadoraFormat}'" };
             var cte = await _oData.Lookup<ListVendVendorV2Entity>(oDataRequest.EntityName, oDataRequest.Params);
             if (cte.value != null && cte.value.Length > 0)
             {
                 var transportadora = new TransportadoraResponse()
                 {
-                    Cnpj = Convert.ToUInt64(cNPJTransportadora).ToString("000000000000-00"),
+                    Cnpj = cnpjTransportadoraFormat,
                     CodigoExterno = cte.value[0].VendorAccountNumber,
                     Nome = cte.value[0].VendorOrganizationName
                 };
@@ -56,7 +57,7 @@ namespace IntegraCTE.Infra.Services
             return null;
         }
 
-        public Task EnviarCTE(CTE cte)
+        public Task EnviarCTE(CTERequest cte)
         {
             throw new NotImplementedException();
         }

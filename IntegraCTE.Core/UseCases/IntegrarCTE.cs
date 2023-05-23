@@ -24,7 +24,9 @@ namespace IntegraCTE.Core.UseCases
         {
             var cteModel = await _repository.BuscarCTE(id);
             var cte = _mapper.Map<CTE>(cteModel);
-            await _service.EnviarCTE(cte);
+            
+            var cteRequest = _mapper.Map<CTERequest>(cteModel);
+            await _service.EnviarCTE(cteRequest);
         }
     }
 }
