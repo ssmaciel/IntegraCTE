@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegraCTE.Infra.Migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    [Migration("20230524140112_v1-alter-transportadora-campos-pagamentos")]
-    partial class v1altertransportadoracampospagamentos
+    [Migration("20230524151051_v2-alter-transportadora-campos-pagamentos")]
+    partial class v2altertransportadoracampospagamentos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -206,7 +206,6 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CalendarioPagamento")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -220,12 +219,10 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("EspecificacaoMetodoPagamento")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("MetodoPagamento")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 

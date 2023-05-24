@@ -204,7 +204,6 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CalendarioPagamento")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -218,12 +217,10 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("EspecificacaoMetodoPagamento")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("MetodoPagamento")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 

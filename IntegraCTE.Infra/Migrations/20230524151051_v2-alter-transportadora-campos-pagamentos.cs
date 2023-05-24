@@ -4,7 +4,7 @@
 
 namespace IntegraCTE.Infra.Migrations
 {
-    public partial class v1altertransportadoracampospagamentos : Migration
+    public partial class v2altertransportadoracampospagamentos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,24 +13,21 @@ namespace IntegraCTE.Infra.Migrations
                 table: "Transportadoras",
                 type: "nvarchar(100)",
                 maxLength: 100,
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "EspecificacaoMetodoPagamento",
                 table: "Transportadoras",
                 type: "nvarchar(10)",
                 maxLength: 10,
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "MetodoPagamento",
                 table: "Transportadoras",
                 type: "nvarchar(20)",
                 maxLength: 20,
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
