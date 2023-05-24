@@ -50,8 +50,11 @@ namespace IntegraCTE.Infra.Services
                 {
                     Cnpj = cnpjTransportadoraFormat,
                     CodigoExterno = cte.value[0].VendorAccountNumber,
-                    Nome = cte.value[0].VendorOrganizationName
-                };
+                    Nome = cte.value[0].VendorOrganizationName,
+                    MetodoPagamento = cte.value.ToList().Where(f => !string.IsNullOrEmpty(f.DefaultVendorPaymentMethodName)).FirstOrDefault()?.DefaultVendorPaymentMethodName,
+                    EspecificacaoMetodoPagamento = cte.value.ToList().Where(f => !string.IsNullOrEmpty(f.PaymentSpecificationId)).FirstOrDefault()?.PaymentSpecificationId,
+                    CalendarioPagamento = cte.value.ToList().Where(f => !string.IsNullOrEmpty(f.DefaultPaymentScheduleName)).FirstOrDefault()?.DefaultPaymentScheduleName
+            };
                 return transportadora;
             }
             return null;

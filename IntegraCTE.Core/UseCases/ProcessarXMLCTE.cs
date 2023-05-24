@@ -30,7 +30,7 @@ namespace IntegraCTE.Core.UseCases
             var notasDTO = _mapper.Map<List<NotaDTO>>(dadosNotas.value);
             cte.AdicionarDadosNotas(notasDTO);
 
-            TransportadoraDTO transportadoraDTO = null;
+            TransportadoraDTO transportadoraDTO;
             var transportadoraModel = await _repository.BuscarTransportadoraPorCNPJ(Convert.ToUInt64(cte.Transportadora.Cnpj).ToString("000000000000-00"));
             if (transportadoraModel == null)
             {
@@ -38,9 +38,8 @@ namespace IntegraCTE.Core.UseCases
                 transportadoraDTO = _mapper.Map<TransportadoraDTO>(transportadoraResponse);
                 transportadoraDTO.Id = Guid.NewGuid();
 
-                transportadoraModel = new TransportadoraModel(transportadoraDTO.Id, transportadoraDTO.Cnpj, transportadoraDTO.Nome, transportadoraDTO.CodigoExterno);
+                transportadoraModel = new TransportadoraModel(transportadoraDTO.Id, transportadoraDTO.Cnpj, transportadoraDTO.Nome, transportadoraDTO.CodigoExterno, transportadoraDTO.MetodoPagamento, transportadoraDTO.EspecificacaoMetodoPagamento, transportadoraDTO.CalendarioPagamento);
                 await _repository.Adicionar(transportadoraModel);
-            //await _repository.SaveChangesAsync();
             }
             else
             {
