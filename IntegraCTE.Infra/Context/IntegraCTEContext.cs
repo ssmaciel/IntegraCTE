@@ -11,10 +11,10 @@ namespace IntegraCTE.Infra.Context
 {
     public class IntegraCTEContext : DbContext, IIntegraCTEContext
     {
-        //public IntegraCTEContext(DbContextOptions<IntegraCTEContext> options) : base(options)
-        //{
-        //    this.Database.Migrate();
-        //}
+        public IntegraCTEContext(DbContextOptions<IntegraCTEContext> options) : base(options)
+        {
+            this.Database.Migrate();
+        }
         public IQueryable<ArquivoModel> ArquivoCTE => ArquivoCTEDb;
 
         public IQueryable<CTEModel> CTE => CTEDb;
@@ -64,20 +64,20 @@ namespace IntegraCTE.Infra.Context
             return await base.SaveChangesAsync();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=IntegraCteDB;user id=sa;password=Password_01", p =>
-            {
-                p.EnableRetryOnFailure(
-                     maxRetryCount: 2,
-                     maxRetryDelay: TimeSpan.FromSeconds(5),
-                     errorNumbersToAdd: null)
-                 .MigrationsHistoryTable("EFHistory_IntegraCTE");
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=localhost;Database=IntegraCteDB;user id=sa;password=Password_01", p =>
+        //    {
+        //        p.EnableRetryOnFailure(
+        //             maxRetryCount: 2,
+        //             maxRetryDelay: TimeSpan.FromSeconds(5),
+        //             errorNumbersToAdd: null)
+        //         .MigrationsHistoryTable("EFHistory_IntegraCTE");
 
-            });
-            optionsBuilder.EnableDetailedErrors();
-            optionsBuilder.EnableSensitiveDataLogging();
-        }
+        //    });
+        //    optionsBuilder.EnableDetailedErrors();
+        //    optionsBuilder.EnableSensitiveDataLogging();
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(IntegraCTEContext).Assembly);
