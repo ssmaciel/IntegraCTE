@@ -4,16 +4,18 @@ using IntegraCTE.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IntegraCTE.Infra.Migrations
+namespace IntegraCTE.Infra.migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    partial class IntegraCTEContextModelSnapshot : ModelSnapshot
+    [Migration("20230530115950_v2-alter-table-cte-destinatirio")]
+    partial class v2altertablectedestinatirio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

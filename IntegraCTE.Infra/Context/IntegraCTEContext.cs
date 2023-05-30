@@ -28,18 +28,21 @@ namespace IntegraCTE.Infra.Context
 
         public async Task Adicionar<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Added;
             await Task.CompletedTask;
         }
 
         public async Task Atualizar<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Modified;
             await Task.CompletedTask;
         }
 
         public async Task Remover<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Deleted;
             await Task.CompletedTask;
         }   

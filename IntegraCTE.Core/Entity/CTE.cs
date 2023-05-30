@@ -57,7 +57,7 @@ namespace IntegraCTE.Core.Entity
         {
             var notas = dadnosNotas.Select(s => new Nota() { ChaveNotaFical = s.ChaveNotaFical, NumeroNotaFical = s.NumeroNotaFical, SerieNotaFical = s.SerieNotaFical });
             Notas.AddRange(notas);
-            Site = dadnosNotas[0].Estabelecimento;
+            Site = dadnosNotas.FirstOrDefault()?.Estabelecimento;
         }
 
         public void AdicionarDadosTransportadora(TransportadoraDTO transportadoraDTO)

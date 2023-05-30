@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using IntegraCTE.Core.DTO;
+using IntegraCTE.Core.Model;
+using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -29,5 +31,8 @@ namespace IntegraCTE.API.Controllers
             await ucProcessarXML.Execute(dto.Id);
             return Ok(xml);
         }
+
+        [HttpGet]
+        public async Task<CTEModel> Get([FromServices] IIntegraCTERepository repository, Guid id) => await repository.BuscarCTE(id);
     }
 }

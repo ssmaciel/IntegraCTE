@@ -13,6 +13,9 @@ namespace IntegraCTE.Infra.Configuration
             builder.Property(x => x.ChaveNotaFiscal).HasColumnType("VARCHAR(MAX)");
             builder.Property(x => x.NotaFiscal).HasColumnType("VARCHAR(MAX)");
             builder.Property(x => x.Notas).HasColumnType("VARCHAR(MAX)");
+            builder.Property(x => x.DestinatarioCodigoMunicipio).IsRequired(false);
+            builder.Property(x => x.DestinatarioCodigoPais).IsRequired(false);
+            builder.Property(x => x.DestinatarioPais).IsRequired(false);
 
             builder.HasOne(x => x.Transportadora).WithMany(x => x.CTEs)
         .OnDelete(DeleteBehavior.Restrict);
