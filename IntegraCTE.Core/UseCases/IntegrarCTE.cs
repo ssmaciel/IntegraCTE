@@ -23,9 +23,10 @@ namespace IntegraCTE.Core.UseCases
         public async Task Execute(Guid id)
         {
             var cteModel = await _repository.BuscarCTE(id);
-            var cte = _mapper.Map<CTE>(cteModel);
+            //var cte = _mapper.Map<CTE>(cteModel);
             
             var cteRequest = _mapper.Map<CTERequest>(cteModel);
+            cteRequest.PreencherPropriedades();
             await _service.EnviarCTE(cteRequest);
         }
     }

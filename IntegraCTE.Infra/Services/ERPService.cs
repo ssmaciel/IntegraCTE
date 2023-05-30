@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace IntegraCTE.Infra.Services
@@ -62,6 +64,8 @@ namespace IntegraCTE.Infra.Services
 
         public Task EnviarCTE(CTERequest cte)
         {
+            var jsonHeader = JsonSerializer.Serialize(cte);
+            var jsonLine = JsonSerializer.Serialize(cte.Linha);
             throw new NotImplementedException();
         }
 

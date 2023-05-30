@@ -35,6 +35,8 @@ namespace IntegraCTE.Core.Services
         [JsonPropertyName("InformationCTE_PTR")]
         public string NotaFiscal { get; private set; }
 
+        [JsonIgnore]
+        public CTELinhaRequest Linha { get; private set; }
 
 
         public string DefaultLedgerDimensionDisplayValue { get; private set; }// = ConfigurationManager.AppSettings["DimensaoFinanceira"].Replace("Estabelecimento", fiscalEstablishmentId),
@@ -77,5 +79,35 @@ namespace IntegraCTE.Core.Services
             ExpectedCrossDockingDate = DateTime.Now.ToString();
             ExpectedStoreAvailableSalesDate = DateTime.Now.ToString();
 }
+    }
+
+    public class CTELinhaRequest
+    {
+        public string PurchaseOrderNumber { get; set; }
+
+        [JsonPropertyName("DeliveryAddressName")]
+        public string DestinatarioNome { get; set; }
+
+        [JsonPropertyName("DeliveryAddressStreet")]
+        public string DestinatarioLogradouro { get; set; }
+
+        [JsonPropertyName("DeliveryAddressStreetNumber")]
+        public string DestinatarioNro { get; set; }
+
+        [JsonPropertyName("DeliveryAddressDistrictName")]
+        public string DestinatarioBairro { get; set; }
+
+        [JsonPropertyName("DeliveryAddressCity")]
+        public string DestinatarioMunicipio { get; set; }
+
+        [JsonPropertyName("DeliveryAddressZipCode")]
+        public string DestinatarioCEP { get; set; }
+
+        [JsonPropertyName("DeliveryAddressStateId")]
+        public string DestinatarioUF { get; set; }
+
+        [JsonPropertyName("DeliveryAddressCountyId")]
+        public string DestinatarioCodigoPais { get; set; }
+
     }
 }

@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen();
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile<ArquivoProfile>();
+    cfg.AddProfile<CTEProfile>();
 });
 IMapper mapper = config.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -56,6 +57,7 @@ builder.Services.AddTransient<IERPService, ERPService>();
 
 builder.Services.AddTransient<ProcessarXMLCTE>();
 builder.Services.AddTransient<UploadCTE>();
+builder.Services.AddTransient<IntegrarCTE>();
 // builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 builder.Services.AddResponseCaching();
