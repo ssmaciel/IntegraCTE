@@ -4,9 +4,11 @@ using IntegraCTE.Core.Services;
 using IntegraCTE.Core.Services.Model;
 using IntegraCTE.Core.Services.Responses;
 using IntegraCTE.Infra.Services.Model;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -17,13 +19,15 @@ namespace IntegraCTE.Infra.Services
 {
     public class ERPService : IERPService
     {
-        private readonly ILogger<ODataJson> _logger;
+        private readonly ILogger<ERPService> _logger;
         private readonly ODataJson _oData;
+        private readonly IConfiguration _configuration;
 
-        public ERPService(ILogger<ODataJson> logger, ODataJson oData)
+        public ERPService(ILogger<ERPService> logger, ODataJson oData, IConfiguration configuration)
         {
             _logger = logger;
             _oData = oData;
+            _configuration = configuration;
         }
 
         public async Task<ListFiscalDocumentEntity_PTR> BuscarDadosNotasPorChavesIN(List<Nota> notas)
@@ -35,7 +39,7 @@ namespace IntegraCTE.Infra.Services
                     chaves += $"AccessKey eq '{chave.ChaveNotaFical}' or ";
             }
             chaves = chaves.Remove(chaves.Length - 4);
-            ODataRequest oDataRequest = new ODataRequest { EntityName = "FiscalDocumentEntity_PTR", Params = $"&$filter=dataAreaId eq 'CNX' and ({chaves})" };
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "FiscalDocumentEntity_PTR", Params = $"&$filter=dataAreaId eq '{_configuration.GetSection("ERPService:SiglaEmpresa").Value}' and ({chaves})" };
             var cte = await _oData.Lookup<ListFiscalDocumentEntity_PTR>(oDataRequest.EntityName, oDataRequest.Params);
             return cte;
             //throw new NotImplementedException();
@@ -44,7 +48,7 @@ namespace IntegraCTE.Infra.Services
         public async Task<TransportadoraResponse> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora)
         {
             var cnpjTransportadoraFormat = Convert.ToUInt64(cNPJTransportadora).ToString("000000000000-00");
-            ODataRequest oDataRequest = new ODataRequest { EntityName = "VendorsV2", Params = $"&$filter=dataAreaId eq 'CNX' and BrazilianCNPJOrCPF eq '{cnpjTransportadoraFormat}'" };
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "VendorsV2", Params = $"&$filter=dataAreaId eq '{_configuration.GetSection("ERPService:SiglaEmpresa").Value}' and BrazilianCNPJOrCPF eq '{cnpjTransportadoraFormat}'" };
             var cte = await _oData.Lookup<ListVendVendorV2Entity>(oDataRequest.EntityName, oDataRequest.Params);
             if (cte.value != null && cte.value.Length > 0)
             {
@@ -62,18 +66,50 @@ namespace IntegraCTE.Infra.Services
             return null;
         }
 
-        public Task EnviarCTE(CTERequest cte)
+        public async Task EnviarCTE(CTERequest cte)
         {
-            var jsonHeader = JsonSerializer.Serialize(cte);
+            var jsonOpt = new JsonSerializerOptions();
+            jsonOpt.Converters.Add(new CustomDateTimeConverter());
+
+            var jsonHeader = JsonSerializer.Serialize(cte, options: jsonOpt);
+            var ret = await _oData.Post<CTEResponse>("PurchaseOrderHeadersV2", jsonHeader);
+            if (ret == null) throw new NotImplementedException();
+            cte.Linha.PurchaseOrderNumber = ret.PurchaseOrderNumber;
             var jsonLine = JsonSerializer.Serialize(cte.Linha);
-            throw new NotImplementedException();
+            var ret2 = await _oData.Post<CTELinhaRequest>("PurchaseOrderLines", jsonLine);
         }
 
         public async Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE()
         {
-            ODataRequest oDataRequest = new ODataRequest { EntityName = "CTEParameters_PTR", Params = $"&$filter=dataAreaId eq 'CNX'" };
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "CTEParameters_PTR", Params = $"&$filter=dataAreaId eq '{_configuration.GetSection("ERPService:SiglaEmpresa").Value}'" };
             var cte = await _oData.Lookup<ListCTEParameters_PTR>(oDataRequest.EntityName, oDataRequest.Params);
             return cte;
+        }
+
+        public async Task<ListOperationTypes> BuscarTipoOperacao()
+        {
+            var cteParameter = await BuscarParametrosIntegracaoCTE();
+            if (cteParameter is null || cteParameter.value is null || cteParameter.value.Count() == 0)
+            {
+                // setar mensagem de erro
+                return null;
+            }
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "OperationTypes", Params = $"&$filter=dataAreaId eq '{_configuration.GetSection("ERPService:SiglaEmpresa").Value}' and OperationTypeID eq '{cteParameter.value[0].OperationTypeID}'" };
+            var cte = await _oData.Lookup<ListOperationTypes>(oDataRequest.EntityName, oDataRequest.Params);
+            return cte;
+        }
+    }
+    public class CustomDateTimeConverter : JsonConverter<DateTime>
+    {
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return DateTime.ParseExact(reader.GetString(),
+                "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
         }
     }
 }

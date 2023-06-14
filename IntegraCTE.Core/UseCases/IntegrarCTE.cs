@@ -4,6 +4,7 @@ using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
+using IntegraCTE.Core.Services.Model;
 
 namespace IntegraCTE.Core.UseCases
 {
@@ -27,6 +28,11 @@ namespace IntegraCTE.Core.UseCases
             
             var cteRequest = _mapper.Map<CTERequest>(cteModel);
             cteRequest.PreencherPropriedades();
+            var tipoOperacao = await _service.BuscarTipoOperacao();
+            var tipo = tipoOperacao.value[0].RecId_PTR;
+            var dataAreaId = tipoOperacao.value[0].dataAreaId;
+            cteRequest.AdicionarTipoOperacao(tipo);
+            cteRequest.AdicionarEmpresa(dataAreaId);
             await _service.EnviarCTE(cteRequest);
         }
     }

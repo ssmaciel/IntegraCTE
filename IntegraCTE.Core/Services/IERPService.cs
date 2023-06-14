@@ -11,5 +11,6 @@ namespace IntegraCTE.Core.Services
         Task<TransportadoraResponse> BuscarDadosTrasnportadoraPorCNPJ(string cNPJTransportadora);
         Task EnviarCTE(CTERequest cte);
         Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE();
+        Task<ListOperationTypes> BuscarTipoOperacao();
     }
 }

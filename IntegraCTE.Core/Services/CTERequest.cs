@@ -8,25 +8,29 @@ using System.Threading.Tasks;
 
 namespace IntegraCTE.Core.Services
 {
+    public class CTEResponse
+    {
+        public string PurchaseOrderNumber { get; set; } = "";
+    }
     public class CTERequest
     {
 
         [JsonPropertyName("dataAreaId")]
         public string Empresa { get; private set; }//= cteParameter.DataArea.ToLower()
 
-        [JsonPropertyName("VendorOrderReference")]
+        [JsonPropertyName("EFDocAcKey_BR_PTR")]
         public string ChaveAcessoCte { get; private set; }
 
-        [JsonPropertyName("VendorOrderReference")]
+        [JsonPropertyName("FiscalDocDate_PTR")]
         public DateTime DataEmissao { get; private set; }
 
-        [JsonPropertyName("VendorOrderReference")]
+        [JsonPropertyName("FiscalDocModel_BR_PTR")]
         public string ModeloCte { get; private set; }
 
-        [JsonPropertyName("VendorOrderReference")]
+        [JsonPropertyName("FiscalDocNum_PTR")]
         public string NumeroCte { get; private set; }
 
-        [JsonPropertyName("VendorOrderReference")]
+        [JsonPropertyName("FiscalDocSeries_BR_PTR")]
         public string SerieCte { get; private set; }
 
         [JsonPropertyName("VendorOrderReference")]
@@ -44,19 +48,19 @@ namespace IntegraCTE.Core.Services
 
         public string InvoiceVendorAccountNumber { get; private set; }//= vendTableEntityResponse.value[0].AccountNum,
         public string OrderVendorAccountNumber { get; private set; }// = vendVendorV2.value[0].VendorAccountNumber,
-        public string SalesPurchOperationType_BR { get; private set; }//= operationTypeResponse.value[0].RecId_PTR,
+        public long SalesPurchOperationType_BR { get; private set; }//= operationTypeResponse.value[0].RecId_PTR,
 
         public string VendorPaymentMethodName { get; private set; }// = vendVendorV2.value.ToList().Where(f => !string.IsNullOrEmpty(f.DefaultVendorPaymentMethodName)).FirstOrDefault()?.DefaultVendorPaymentMethodName,
         public string VendorPaymentMethodSpecificationName { get; private set; }//= vendVendorV2.value.ToList().Where(f => !string.IsNullOrEmpty(f.PaymentSpecificationId)).FirstOrDefault()?.PaymentSpecificationId,
         public string PaymentScheduleName { get; private set; }//= "",
         public decimal CashDiscountPercentage { get; private set; }//= 0,
-        public string AccountingDate { get; private set; }//= DateTime.Now.ToString(),
-        public string ConfirmedDeliveryDate { get; private set; }//= DateTime.Now.ToString(),
-        public string PurchaseOrderNumber { get; private set; }//= "0",
-        public string ExpectedCrossDockingDate { get; private set; }//= DateTime.Now.ToString(),
-        public string ExpectedStoreAvailableSalesDate { get; private set; }//= DateTime.Now.ToString(),
+        public DateTime AccountingDate { get; private set; }//= DateTime.Now.ToString(),
+        public DateTime ConfirmedDeliveryDate { get; private set; }//= DateTime.Now.ToString(),
+        public DateTime ExpectedCrossDockingDate { get; private set; }//= DateTime.Now.ToString(),
+        public DateTime ExpectedStoreAvailableSalesDate { get; private set; }//= DateTime.Now.ToString(),
+        public string LanguageId { get; private set; }//= 0,
 
-
+        public CTERequest() { }
         public CTERequest(string empresa, string chaveAcessoCte, DateTime dataEmissao, string modeloCte, string numeroCte, string serieCte, string justificativa, string notaFiscal)
         {
             Empresa = empresa;
@@ -73,12 +77,22 @@ namespace IntegraCTE.Core.Services
         {
             PaymentScheduleName = "";
             CashDiscountPercentage = 0;
-            AccountingDate = DateTime.Now.ToString();
-            ConfirmedDeliveryDate = DateTime.Now.ToString();
-            PurchaseOrderNumber = "0";
-            ExpectedCrossDockingDate = DateTime.Now.ToString();
-            ExpectedStoreAvailableSalesDate = DateTime.Now.ToString();
-}
+            AccountingDate = DateTime.Now;
+            ConfirmedDeliveryDate = DateTime.Now;
+            ExpectedCrossDockingDate = DateTime.Now;
+            ExpectedStoreAvailableSalesDate = DateTime.Now;
+            LanguageId = "pt-BR";
+        }
+
+        internal void AdicionarTipoOperacao(long tipo)
+        {
+            SalesPurchOperationType_BR = tipo;
+        }
+
+        internal void AdicionarEmpresa(string dataAreaId)
+        {
+            Empresa = dataAreaId;
+        }
     }
 
     public class CTELinhaRequest

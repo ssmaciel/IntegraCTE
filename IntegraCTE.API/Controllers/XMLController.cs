@@ -29,7 +29,7 @@ namespace IntegraCTE.API.Controllers
             ArquivoDTO dto = new(xml);
             await ucUploadXML.Execute(dto);
             await ucProcessarXML.Execute(dto.Id);
-            return Ok(xml);
+            return Ok(dto.Id);
         }
 
         [HttpGet]

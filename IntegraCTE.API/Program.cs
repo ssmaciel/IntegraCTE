@@ -9,7 +9,11 @@ using IntegraCTE.Infra.Context;
 using IntegraCTE.Infra.Repository;
 using IntegraCTE.Infra.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,8 +51,27 @@ builder.Services.AddDbContext<IIntegraCTEContext, IntegraCTEContext>(o =>
 
 builder.Services.AddHttpClient<ODataJson>((op) =>
 {
-    op.Timeout = TimeSpan.FromMinutes(20);
-    op.BaseAddress = new Uri(builder.Configuration.GetSection("ERPService:UrlDynamics").Value);
+    try
+    {
+        string aadClientAppId = builder.Configuration.GetSection("ERPService:ClientIdDynamics").Value;
+        string aadClientSecret = builder.Configuration.GetSection("ERPService:ClientSecret").Value;
+        string aadResource = builder.Configuration.GetSection("ERPService:UrlResource").Value;
+        string aadTenant = builder.Configuration.GetSection("ERPService:ActiveDirectoryTenant").Value;
+
+        AuthenticationContext authenticationContext = new AuthenticationContext(aadTenant, false);
+        AuthenticationResult authenticationResult = authenticationContext.AcquireTokenAsync(aadResource, new ClientCredential(aadClientAppId, aadClientSecret)).Result;
+        op.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authenticationResult.AccessToken);
+        op.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    }
+    catch (Exception ex)
+    {
+    }
+    finally 
+    { 
+        op.Timeout = TimeSpan.FromMinutes(20);
+        op.BaseAddress = new Uri(builder.Configuration.GetSection("ERPService:UrlResource").Value);
+    }
+
 });
 
 
