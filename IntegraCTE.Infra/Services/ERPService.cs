@@ -98,6 +98,20 @@ namespace IntegraCTE.Infra.Services
             var cte = await _oData.Lookup<ListOperationTypes>(oDataRequest.EntityName, oDataRequest.Params);
             return cte;
         }
+
+        public async Task<ListFiscalEstablishments> BuscarEstabelecimentoFiscal(string cnpjEntidadeLegal)
+        {
+            var cteParameter = await BuscarParametrosIntegracaoCTE();
+            if (cteParameter is null || cteParameter.value is null || cteParameter.value.Count() == 0)
+            {
+                // setar mensagem de erro
+                return null;
+            }
+            ODataRequest oDataRequest = new ODataRequest { EntityName = "FiscalEstablishments", Params = $"&$filter=dataAreaId eq '{cteParameter.value[0].DataArea.ToLower()}' and CNPJ eq '{cnpjEntidadeLegal}'" };
+                                                 
+            var cte = await _oData.Lookup<ListFiscalEstablishments>(oDataRequest.EntityName, oDataRequest.Params);
+            return cte;
+        }
     }
     public class CustomDateTimeConverter : JsonConverter<DateTime>
     {

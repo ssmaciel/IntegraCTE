@@ -46,7 +46,7 @@ namespace IntegraCTE.Infra.Repository
 
         public async Task<CTEModel> BuscarCTE(Guid id)
         {
-            return await _context.CTE.SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.CTE.Include(x => x.Transportadora).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<TransportadoraModel> BuscarTransportadoraPorCNPJ(string cnpj)

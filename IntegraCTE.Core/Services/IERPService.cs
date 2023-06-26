@@ -12,5 +12,6 @@ namespace IntegraCTE.Core.Services
         Task EnviarCTE(CTERequest cte);
         Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE();
         Task<ListOperationTypes> BuscarTipoOperacao();
+        Task<ListFiscalEstablishments> BuscarEstabelecimentoFiscal(string cnpjEntidadeLegal);
     }
 }

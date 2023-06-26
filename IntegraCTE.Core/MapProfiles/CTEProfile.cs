@@ -42,6 +42,9 @@ namespace IntegraCTE.Core.MapProfiles
                 .ForPath(s => s.Linha.DestinatarioCEP, opt => opt.MapFrom(a => a.DestinatarioCEP))
                 .ForPath(s => s.Linha.DestinatarioUF, opt => opt.MapFrom(a => a.DestinatarioUF))
                 .ForPath(s => s.Linha.DestinatarioCodigoPais, opt => opt.MapFrom(a => a.DestinatarioCodigoPais))
+                .ForPath(s => s.OrderVendorAccountNumber, opt => opt.MapFrom(a => a.Transportadora.CodigoExterno))
+                .ForPath(s => s.VendorPaymentMethodName, opt => opt.MapFrom(a => a.Transportadora.MetodoPagamento))
+                .ForPath(s => s.VendorPaymentMethodSpecificationName, opt => opt.MapFrom(a => a.Transportadora.EspecificacaoMetodoPagamento))
                 .ReverseMap();
 
             CreateMap<NotaDTO, FiscalDocumentEntity_PTR>()
