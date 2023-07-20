@@ -4,6 +4,7 @@ using IntegraCTE.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegraCTE.Infra.Migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    partial class IntegraCTEContextModelSnapshot : ModelSnapshot
+    [Migration("20230720141815_v3-campos-linha-cte")]
+    partial class v3camposlinhacte
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

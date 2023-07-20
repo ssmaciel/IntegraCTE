@@ -100,27 +100,35 @@ namespace IntegraCTE.Core.Services
         public string PurchaseOrderNumber { get; set; }
 
         [JsonPropertyName("DeliveryAddressName")]
+        [JsonIgnore]
         public string DestinatarioNome { get; set; }
 
         [JsonPropertyName("DeliveryAddressStreet")]
+        [JsonIgnore]
         public string DestinatarioLogradouro { get; set; }
 
         [JsonPropertyName("DeliveryAddressStreetNumber")]
+        [JsonIgnore]
         public string DestinatarioNro { get; set; }
 
         [JsonPropertyName("DeliveryAddressDistrictName")]
+        [JsonIgnore]
         public string DestinatarioBairro { get; set; }
 
         [JsonPropertyName("DeliveryAddressCity")]
+        [JsonIgnore]
         public string DestinatarioMunicipio { get; set; }
 
         [JsonPropertyName("DeliveryAddressZipCode")]
+        [JsonIgnore]
         public string DestinatarioCEP { get; set; }
 
         [JsonPropertyName("DeliveryAddressStateId")]
+        [JsonIgnore]
         public string DestinatarioUF { get; set; }
 
         [JsonPropertyName("DeliveryAddressCountyId")]
+        [JsonIgnore]
         public string DestinatarioCodigoPais { get; set; }
 
         public string ItemNumber { get; set; }

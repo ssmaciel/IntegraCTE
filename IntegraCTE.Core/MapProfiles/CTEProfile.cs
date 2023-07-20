@@ -30,6 +30,12 @@ namespace IntegraCTE.Core.MapProfiles
                 .ForMember(s => s.DestinatarioCodigoPais, opt => opt.MapFrom(a => a.Destinatario.CodigoPais))
                 .ForMember(s => s.DestinatarioPais, opt => opt.MapFrom(a => a.Destinatario.Pais))
                 .ForMember(s => s.Notas, opt => opt.MapFrom(a => a.NotaFiscal))
+                .ForMember(s => s.ItemNumber, opt => opt.MapFrom(a => a.Linha.ItemNumber))
+                .ForMember(s => s.LineNumber, opt => opt.MapFrom(a => a.Linha.LineNumber))
+                .ForMember(s => s.PurchasePrice, opt => opt.MapFrom(a => a.Linha.PurchasePrice))
+                .ForMember(s => s.PurchasePriceQuantity, opt => opt.MapFrom(a => a.Linha.PurchasePriceQuantity))
+                .ForMember(s => s.CFOPCode, opt => opt.MapFrom(a => a.Linha.CFOPCode))
+                .ForMember(s => s.dataAreaId, opt => opt.MapFrom(a => a.Linha.dataAreaId))
                 .ReverseMap();
 
             CreateMap<CTEModel, CTERequest>()
