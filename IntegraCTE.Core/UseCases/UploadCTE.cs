@@ -25,6 +25,7 @@ namespace IntegraCTE.Core.UseCases
         public async Task Execute(ArquivoDTO arquivoDTO)
         {
             var xmlModel = _mapper.Map<ArquivoModel>(arquivoDTO);
+            xmlModel.Empresa = Environment.GetEnvironmentVariable("ERPService:SiglaEmpresa");
             await _commandRepository.Adicionar(xmlModel);
             await _commandRepository.SaveChangesAsync();
         }

@@ -24,7 +24,9 @@ namespace IntegraCTE.Core.UseCases
         {
             var arquivoModel = await _repository.BuscarArquivoCTE(id);
             var cte = _mapper.Map<CTE>(arquivoModel);
-            cte.ProcessarXML();
+            var config = await _service.BuscarParametrosIntegracaoCTE();
+            cte.ProcessarXML(config.value[0].DataArea);
+            cte.PreencherLinha(config.value[0].ItemId, config.value[0].DataArea);
             var chave = $"'{cte.ChaveNotaFiscal.Remove(cte.ChaveNotaFiscal.Length-1).Replace(",", "','")}'";
             var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.Notas);
             var notasDTO = _mapper.Map<List<NotaDTO>>(dadosNotas.value);

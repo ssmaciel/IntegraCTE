@@ -123,5 +123,12 @@ namespace IntegraCTE.Core.Services
         [JsonPropertyName("DeliveryAddressCountyId")]
         public string DestinatarioCodigoPais { get; set; }
 
+        public string ItemNumber { get; set; }
+        public int LineNumber { get; set; }
+        public string PurchasePrice { get; set; }
+        public int PurchasePriceQuantity { get; set; }
+        public string CFOPCode { get; set; }
+        public string dataAreaId { get; set; }
+
     }
 }

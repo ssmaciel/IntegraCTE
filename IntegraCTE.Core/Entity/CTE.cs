@@ -1,10 +1,23 @@
 using IntegraCTE.Core.DTO;
+using System.Globalization;
 using System.Xml;
 
 namespace IntegraCTE.Core.Entity
 {
+
+    public class Linha
+    {
+        public string ItemNumber { get; internal set; }
+        public int LineNumber { get; internal set; }
+        public decimal PurchasePrice { get; internal set; }
+        public int PurchasePriceQuantity { get; internal set; }
+        public string CFOPCode { get; internal set; }
+        public string dataAreaId { get; internal set; }
+    }
     public class CTE
     {
+        private CultureInfo globalCulture { get; set; } = new CultureInfo("en-US");
+
         public Guid Id { get; set; }
         public string XML { get; set; }
         public List<Nota> Notas { get; set; }
@@ -47,10 +60,28 @@ namespace IntegraCTE.Core.Entity
 
         public string UFRemetente { get; private set; }
 
-        public void ProcessarXML()
+        public Linha Linha { get; private set; }
+
+        public void PreencherLinha(string itemId, string dataAreaId)
+        {
+            const string cfop_MesmoEstado = "1.353";
+            const string cfop_OutroEstado = "2.353";
+
+            Linha = new()
+            {
+                ItemNumber = itemId,
+                LineNumber = 1,
+                PurchasePrice = decimal.Parse(this.ValorCte, globalCulture),
+                dataAreaId = dataAreaId.ToLower(),
+                PurchasePriceQuantity = 1,
+                CFOPCode = UFEmitente == UFRemetente ? cfop_MesmoEstado : cfop_OutroEstado
+            };
+        }
+
+        public void ProcessarXML(string dataAreaID)
         {
             Notas = new List<Nota>();
-            MontarCTePorXml(XML, "CNX");
+            MontarCTePorXml(XML, dataAreaID);
         }
 
         public void AdicionarDadosNotas(List<NotaDTO> dadnosNotas)

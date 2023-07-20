@@ -5,6 +5,7 @@ namespace IntegraCTE.Core.Model
         public Guid Id { get; set; }
         public string XML { get; set; }
         public bool Processado { get; set; }
+        public string Empresa { get; set; }
 
         //public string TransportadoraCnpj { get; private set; }
         //public string TransportadoraNome { get; private set; }
@@ -68,11 +69,12 @@ namespace IntegraCTE.Core.Model
 
         }
 
-        public ArquivoModel(Guid id, string xML, DateTime dataArquivo)
+        public ArquivoModel(Guid id, string xML, DateTime dataArquivo, string empresa)
         {
             Id = id;
             XML = xML;
             DataArquivo = dataArquivo;
+            Empresa = empresa;
         }
     }
 }

@@ -70,12 +70,14 @@ namespace IntegraCTE.Infra.Services
         {
             var jsonOpt = new JsonSerializerOptions();
             jsonOpt.Converters.Add(new CustomDateTimeConverter());
-
+            dynamic _mediator = new { };
             var jsonHeader = JsonSerializer.Serialize(cte, options: jsonOpt);
+            //await _mediator.Loggar(cte.NumeroCte, "Envio do cabecalho", jsonHeader);
             var ret = await _oData.Post<CTEResponse>("PurchaseOrderHeadersV2", jsonHeader);
             if (ret == null) throw new NotImplementedException();
             cte.Linha.PurchaseOrderNumber = ret.PurchaseOrderNumber;
             var jsonLine = JsonSerializer.Serialize(cte.Linha);
+            //await _mediator.Loggar(cte.NumeroCte, "Envio da linha", jsonLine);
             var ret2 = await _oData.Post<CTELinhaRequest>("PurchaseOrderLines", jsonLine);
         }
 
