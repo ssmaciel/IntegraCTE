@@ -72,6 +72,10 @@ namespace IntegraCTE.Core.Model
         public bool Integrado { get; set; }
         public DateTime? DataIntegracao { get; set; }
 
+        public void AddOrdemCompra(string ordemCompra)
+        {
+            OrdemCompra = ordemCompra;
+        }
 
     }
 }
