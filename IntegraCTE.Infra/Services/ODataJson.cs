@@ -1,4 +1,6 @@
-﻿using IntegraCTE.Infra.Services.Model;
+﻿using IntegraCTE.Core.Services.Model;
+using IntegraCTE.Core.ValidationMessages;
+using IntegraCTE.Infra.Services.Model;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -20,12 +22,14 @@ namespace IntegraCTE.Infra.Services
         private readonly ILogger<ODataJson> _logger;
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
+        protected readonly IValidationMessage _validationMessage;
 
-        public ODataJson(IConfiguration configuration, HttpClient httpClient, ILogger<ODataJson> logger)
+        public ODataJson(IConfiguration configuration, HttpClient httpClient, ILogger<ODataJson> logger, IValidationMessage validationMessage)
         {
             _configuration = configuration;
             _httpClient = httpClient;
             _logger = logger;
+            _validationMessage = validationMessage;
         }
 
         public async Task<string> Lookup(string Entity, string param)
@@ -80,17 +84,49 @@ namespace IntegraCTE.Infra.Services
                 } 
                 var content = new StringContent(body, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync($"data/{Entity}", content);
+                var str = response.Content.ReadAsStringAsync().Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var str = response.Content.ReadAsStringAsync().Result;
                     var result = JsonSerializer.Deserialize<T>(str);
 
                     return result;
                 }
+                try
+                {
+                    var result = JsonSerializer.Deserialize<ErrorERP>(str);
+                    if (result is not null)
+                    {
+                        var message = result.error.message;
+                        _validationMessage.AddMessage(message, ValidationType.ERP);
+                        if (result.error.innererror is not null)
+                        {
+                            var inner = result.error.innererror;
+                            message = inner.message;
+                            _validationMessage.AddMessage(message, ValidationType.ERP);
+                            if(inner.internalexception is not null)
+                            {
+                                inner = inner.internalexception;
+                                message = inner.message;
+                                _validationMessage.AddMessage(message, ValidationType.ERP);
+                                if (inner.internalexception is not null)
+                                {
+                                    inner = inner.internalexception;
+                                    message = inner.message;
+                                    _validationMessage.AddMessage(message, ValidationType.ERP);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _validationMessage.AddMessage($"Erro ERP: '{str}'", ValidationType.ERP);
+                }
+                
             }
             catch (Exception ex)
             {
-                //this._Validation.Add("Erro na execução do post no oData: " + ex.Message);
+                _validationMessage.AddMessage("Erro na execução do post no oData: " + ex.Message, ValidationType.ERP);
             }
 
             return Activator.CreateInstance<T>();

@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using IntegraCTE.Core.ValidationMessages;
+using IntegraCTE.Infra.ValidationMessages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,7 @@ builder.Services.AddHttpClient<ODataJson>((op) =>
 
 });
 
+builder.Services.AddScoped<IValidationMessage, ValidationMessage>();
 
 builder.Services.AddTransient<IIntegraCTERepository, IntegraCTERepository>();
 builder.Services.AddTransient<IERPService, ERPService>();
@@ -81,7 +84,8 @@ builder.Services.AddTransient<IERPService, ERPService>();
 builder.Services.AddTransient<ProcessarXMLCTE>();
 builder.Services.AddTransient<UploadCTE>();
 builder.Services.AddTransient<IntegrarCTE>();
-// builder.Services.AddHostedService<WorkerProcessamentoXML>();
+
+builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 builder.Services.AddResponseCaching();
 

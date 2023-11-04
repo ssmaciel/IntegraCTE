@@ -52,11 +52,17 @@ namespace IntegraCTE.Core.Services
 
         public string VendorPaymentMethodName { get; private set; }// = vendVendorV2.value.ToList().Where(f => !string.IsNullOrEmpty(f.DefaultVendorPaymentMethodName)).FirstOrDefault()?.DefaultVendorPaymentMethodName,
         public string VendorPaymentMethodSpecificationName { get; private set; }//= vendVendorV2.value.ToList().Where(f => !string.IsNullOrEmpty(f.PaymentSpecificationId)).FirstOrDefault()?.PaymentSpecificationId,
+        [JsonIgnore]
         public string PaymentScheduleName { get; private set; }//= "",
+        [JsonIgnore]
         public decimal CashDiscountPercentage { get; private set; }//= 0,
+        [JsonIgnore]
         public DateTime AccountingDate { get; private set; }//= DateTime.Now.ToString(),
+        [JsonIgnore]
         public DateTime ConfirmedDeliveryDate { get; private set; }//= DateTime.Now.ToString(),
+        [JsonIgnore]
         public DateTime ExpectedCrossDockingDate { get; private set; }//= DateTime.Now.ToString(),
+        [JsonIgnore]
         public DateTime ExpectedStoreAvailableSalesDate { get; private set; }//= DateTime.Now.ToString(),
         public string LanguageId { get; private set; }//= 0,
 
@@ -133,7 +139,7 @@ namespace IntegraCTE.Core.Services
 
         public string ItemNumber { get; set; }
         public int LineNumber { get; set; }
-        public string PurchasePrice { get; set; }
+        public decimal PurchasePrice { get; set; }
         public int PurchasePriceQuantity { get; set; }
         public string CFOPCode { get; set; }
         public string dataAreaId { get; set; }

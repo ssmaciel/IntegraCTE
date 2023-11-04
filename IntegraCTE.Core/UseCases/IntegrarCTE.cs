@@ -5,6 +5,7 @@ using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
 using IntegraCTE.Core.Services.Model;
+using IntegraCTE.Core.ValidationMessages;
 
 namespace IntegraCTE.Core.UseCases
 {
@@ -13,12 +14,14 @@ namespace IntegraCTE.Core.UseCases
         private readonly IIntegraCTERepository _repository;
         private readonly IMapper _mapper;
         private readonly IERPService _service;
+        protected readonly IValidationMessage _validationMessage;
 
-        public IntegrarCTE(IIntegraCTERepository queryRepository, IMapper mapper, IERPService erpService)
+        public IntegrarCTE(IIntegraCTERepository queryRepository, IMapper mapper, IERPService erpService, IValidationMessage validationMessage)
         {
             _repository = queryRepository;
             _mapper = mapper;
             _service = erpService;
+            _validationMessage = validationMessage;
         }
 
         public async Task Execute(Guid id)
@@ -34,6 +37,7 @@ namespace IntegraCTE.Core.UseCases
             cteRequest.AdicionarTipoOperacao(tipo);
             cteRequest.AdicionarEmpresa(dataAreaId);
             await _service.EnviarCTE(cteRequest);
+            var a = _validationMessage.GetValidations();
         }
     }
 }

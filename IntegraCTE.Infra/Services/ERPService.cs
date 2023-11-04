@@ -3,6 +3,7 @@ using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Services;
 using IntegraCTE.Core.Services.Model;
 using IntegraCTE.Core.Services.Responses;
+using IntegraCTE.Core.ValidationMessages;
 using IntegraCTE.Infra.Services.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,12 +23,14 @@ namespace IntegraCTE.Infra.Services
         private readonly ILogger<ERPService> _logger;
         private readonly ODataJson _oData;
         private readonly IConfiguration _configuration;
+        protected readonly IValidationMessage _validationMessage;
 
-        public ERPService(ILogger<ERPService> logger, ODataJson oData, IConfiguration configuration)
+        public ERPService(ILogger<ERPService> logger, ODataJson oData, IConfiguration configuration, IValidationMessage validationMessage)
         {
             _logger = logger;
             _oData = oData;
             _configuration = configuration;
+            _validationMessage = validationMessage;
         }
 
         public async Task<ListFiscalDocumentEntity_PTR> BuscarDadosNotasPorChavesIN(List<Nota> notas)
@@ -66,7 +69,7 @@ namespace IntegraCTE.Infra.Services
             return null;
         }
 
-        public async Task EnviarCTE(CTERequest cte)
+        public async Task<string?> EnviarCTE(CTERequest cte)
         {
             var jsonOpt = new JsonSerializerOptions();
             jsonOpt.Converters.Add(new CustomDateTimeConverter());
@@ -76,9 +79,10 @@ namespace IntegraCTE.Infra.Services
             var ret = await _oData.Post<CTEResponse>("PurchaseOrderHeadersV2", jsonHeader);
             if (ret == null) throw new NotImplementedException();
             cte.Linha.PurchaseOrderNumber = ret.PurchaseOrderNumber;
-            var jsonLine = JsonSerializer.Serialize(cte.Linha);
+            var jsonLine = JsonSerializer.Serialize(cte.Linha, options: jsonOpt);
             //await _mediator.Loggar(cte.NumeroCte, "Envio da linha", jsonLine);
-            var ret2 = await _oData.Post<CTELinhaRequest>("PurchaseOrderLines", jsonLine);
+            await _oData.Post<CTELinhaRequest>("PurchaseOrderLines", jsonLine);
+            return ret.PurchaseOrderNumber;
         }
 
         public async Task<ListCTEParameters_PTR> BuscarParametrosIntegracaoCTE()

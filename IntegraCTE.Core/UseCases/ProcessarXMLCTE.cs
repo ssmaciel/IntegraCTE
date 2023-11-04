@@ -4,6 +4,7 @@ using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
+using IntegraCTE.Core.ValidationMessages;
 
 namespace IntegraCTE.Core.UseCases
 {
@@ -12,12 +13,14 @@ namespace IntegraCTE.Core.UseCases
         private readonly IIntegraCTERepository _repository;
         private readonly IMapper _mapper;
         private readonly IERPService _service;
+        protected readonly IValidationMessage _validationMessage;
 
-        public ProcessarXMLCTE(IIntegraCTERepository repository, IMapper mapper, IERPService service)
+        public ProcessarXMLCTE(IIntegraCTERepository repository, IMapper mapper, IERPService service, IValidationMessage validationMessage)
         {
             _repository = repository;
             _mapper = mapper;
             _service = service;
+            _validationMessage = validationMessage;
         }
 
         public async Task Execute(Guid id)
@@ -26,6 +29,9 @@ namespace IntegraCTE.Core.UseCases
             var cte = _mapper.Map<CTE>(arquivoModel);
             var config = await _service.BuscarParametrosIntegracaoCTE();
             cte.ProcessarXML(config.value[0].DataArea);
+            if (cte.HasValidation())
+                return;
+
             cte.PreencherLinha(config.value[0].ItemId, config.value[0].DataArea);
             var chave = $"'{cte.ChaveNotaFiscal.Remove(cte.ChaveNotaFiscal.Length-1).Replace(",", "','")}'";
             var dadosNotas = await _service.BuscarDadosNotasPorChavesIN(cte.Notas);

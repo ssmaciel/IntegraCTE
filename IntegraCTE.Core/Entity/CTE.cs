@@ -1,4 +1,5 @@
 using IntegraCTE.Core.DTO;
+using IntegraCTE.Core.ValidationMessages;
 using System.Globalization;
 using System.Xml;
 
@@ -16,6 +17,8 @@ namespace IntegraCTE.Core.Entity
     }
     public class CTE
     {
+        private List<string> _mensagemValidacao = new List<string>();
+
         private CultureInfo globalCulture { get; set; } = new CultureInfo("en-US");
 
         public Guid Id { get; set; }
@@ -61,6 +64,16 @@ namespace IntegraCTE.Core.Entity
         public string UFRemetente { get; private set; }
 
         public Linha Linha { get; private set; }
+
+        public bool HasValidation()
+        {
+            return _mensagemValidacao.Any();
+        }
+
+        public List<string> GetMessages()
+        {
+            return _mensagemValidacao;
+        }
 
         public void PreencherLinha(string itemId, string dataAreaId)
         {
@@ -160,7 +173,7 @@ namespace IntegraCTE.Core.Entity
                         }
                         else
                         {
-                            throw ex;
+                            _mensagemValidacao.Add("Remetente CNPJ não encontrado");
                         }
                     }
                     foreach (XmlElement endReme in reme.GetElementsByTagName("enderReme"))
@@ -189,11 +202,14 @@ namespace IntegraCTE.Core.Entity
                             }
                             else
                             {
-                                throw ex;
+                                _mensagemValidacao.Add("Destinatario CNPJ não encontrado");
                             }
                         }
                     }
                 }
+
+                if (HasValidation())
+                    return;
 
                 foreach (XmlElement valor in dadosvalores)
                     ValorCte = valor.GetElementsByTagName("vRec")[0].InnerText.Trim();
@@ -266,6 +282,8 @@ namespace IntegraCTE.Core.Entity
             }
             catch (Exception ex)
             {
+                _mensagemValidacao.Add($"Erro ao processar o XML: '{ex.Message}'");
+                //
             }
         }
     }

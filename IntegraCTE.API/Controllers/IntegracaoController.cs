@@ -1,5 +1,6 @@
 ﻿using IntegraCTE.Core.DTO;
 using IntegraCTE.Core.UseCases;
+using IntegraCTE.Core.ValidationMessages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -10,6 +11,12 @@ namespace IntegraCTE.API.Controllers
     [ApiController]
     public class IntegracaoController : ControllerBase
     {
+        protected readonly IValidationMessage _validationMessage;
+
+        public IntegracaoController(IValidationMessage validationMessage)
+        {
+            _validationMessage = validationMessage;
+        }
 
         //[HttpPost, DisableRequestSizeLimit]
         // POST api/<XMLController>
