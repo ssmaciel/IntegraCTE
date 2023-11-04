@@ -18,6 +18,11 @@ namespace IntegraCTE.Infra.Configuration
 
             builder.Property(x => x.Cnpj).HasMaxLength(15).IsRequired();
             builder.Property(x => x.Nome).HasMaxLength(60).IsRequired();
+
+            builder.Property(x => x.MetodoPagamento).HasMaxLength(20).IsRequired(false);
+            builder.Property(x => x.EspecificacaoMetodoPagamento).HasMaxLength(10).IsRequired(false);
+            builder.Property(x => x.CalendarioPagamento).HasMaxLength(100).IsRequired(false);
+
             builder.HasMany(x => x.CTEs).WithOne(x => x.Transportadora);
             builder.Navigation(b => b.CTEs)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);

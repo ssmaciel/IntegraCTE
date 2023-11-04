@@ -18,17 +18,6 @@ namespace IntegraCTE.Core.MapProfiles
         {
             CreateMap<ArquivoDTO, ArquivoModel>().ReverseMap();
             CreateMap<CTE, ArquivoModel>().ReverseMap();
-            CreateMap<CTE, CTEModel>().ReverseMap();
-            CreateMap<NotaDTO, FiscalDocumentEntity_PTR>()
-                .ForMember(s => s.AccessKey, opt => opt.MapFrom(a => a.ChaveNotaFical))
-                .ForMember(s => s.FiscalDocumentNumber, opt => opt.MapFrom(a => a.NumeroNotaFical))
-                .ForMember(s => s.FiscalDocumentSeries, opt => opt.MapFrom(a => a.SerieNotaFical))
-                .ForMember(s => s.FiscalEstablishment, opt => opt.MapFrom(a => a.Estabelecimento))
-                .ReverseMap();
-            CreateMap<Transportadora, TransportadoraModel>().ReverseMap();
-            CreateMap<TransportadoraDTO, TransportadoraModel>().ReverseMap();
-            CreateMap<TransportadoraResponse, TransportadoraDTO>().ReverseMap();
-            CreateMap<TransportadoraResponse, TransportadoraModel>().ReverseMap();
         }
     }
 }

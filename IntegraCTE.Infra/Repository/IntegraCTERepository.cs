@@ -34,6 +34,11 @@ namespace IntegraCTE.Infra.Repository
             await _context.Adicionar(transportadoraModel);
         }
 
+        public async Task Adicionar(ValidacaoModel validacaoModel)
+        {
+            await _context.Adicionar(validacaoModel);
+        }
+
         public async Task<ArquivoModel> BuscarArquivoCTE(Guid id)
         {
             return await _context.ArquivoCTE.SingleOrDefaultAsync(x => x.Id == id);
@@ -46,7 +51,7 @@ namespace IntegraCTE.Infra.Repository
 
         public async Task<CTEModel> BuscarCTE(Guid id)
         {
-            return await _context.CTE.SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.CTE.Include(x => x.Transportadora).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<TransportadoraModel> BuscarTransportadoraPorCNPJ(string cnpj)

@@ -12,6 +12,7 @@ namespace IntegraCTE.Core.Repository
         Task Adicionar(ArquivoModel xmlModel);
         Task Adicionar(CTEModel cteModel);
         Task Adicionar(TransportadoraModel transportadoraModel);
+        Task Adicionar(ValidacaoModel validacaoModel);
         Task<ArquivoModel> BuscarArquivoCTE(Guid id);
         Task<TransportadoraModel> BuscarTransportadoraPorCNPJ(string cnpj);
         Task<IEnumerable<Guid>> BuscarArquivosCTENProcessados();

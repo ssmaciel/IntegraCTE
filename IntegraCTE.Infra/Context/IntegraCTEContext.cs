@@ -21,25 +21,31 @@ namespace IntegraCTE.Infra.Context
 
         public IQueryable<TransportadoraModel> Transportadora => TransportadoraDb;
 
-        
+        public IQueryable<ValidacaoModel> Validacao => ValidacaoDb;
+
+
         public DbSet<ArquivoModel> ArquivoCTEDb { get; set; }
         public DbSet<CTEModel> CTEDb { get; set; }
         public DbSet<TransportadoraModel> TransportadoraDb { get; set; }
+        public DbSet<ValidacaoModel> ValidacaoDb { get; set; }
 
         public async Task Adicionar<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Added;
             await Task.CompletedTask;
         }
 
         public async Task Atualizar<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Modified;
             await Task.CompletedTask;
         }
 
         public async Task Remover<T>(T t)
         {
+            if (t is null) throw new ArgumentNullException(nameof(t));
             this.Entry(t).State = EntityState.Deleted;
             await Task.CompletedTask;
         }   

@@ -19,6 +19,11 @@ namespace IntegraCTE.Core.Services.Model
         public string VendorOrganizationName { get; set; }
 
         public string VendorAccountNumber { get; set; }
+
+        public string PaymentSpecificationId { get; set; }
+
+        public string DefaultPaymentScheduleName { get; set; }
+        public string DefaultVendorPaymentMethodName { get; set; }
     }
 
 }

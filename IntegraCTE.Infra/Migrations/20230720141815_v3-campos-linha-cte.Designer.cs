@@ -4,6 +4,7 @@ using IntegraCTE.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegraCTE.Infra.Migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    partial class IntegraCTEContextModelSnapshot : ModelSnapshot
+    [Migration("20230720141815_v3-campos-linha-cte")]
+    partial class v3camposlinhacte
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,30 +258,6 @@ namespace IntegraCTE.Infra.Migrations
                     b.ToTable("Transportadoras", (string)null);
                 });
 
-            modelBuilder.Entity("IntegraCTE.Core.Model.ValidacaoModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdArquivo")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Mensagem")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TipoMensagem")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdArquivo");
-
-                    b.ToTable("Validacao", (string)null);
-                });
-
             modelBuilder.Entity("IntegraCTE.Core.Model.CTEModel", b =>
                 {
                     b.HasOne("IntegraCTE.Core.Model.TransportadoraModel", "Transportadora")
@@ -289,22 +267,6 @@ namespace IntegraCTE.Infra.Migrations
                         .IsRequired();
 
                     b.Navigation("Transportadora");
-                });
-
-            modelBuilder.Entity("IntegraCTE.Core.Model.ValidacaoModel", b =>
-                {
-                    b.HasOne("IntegraCTE.Core.Model.ArquivoModel", "Arquivo")
-                        .WithMany("Validacoes")
-                        .HasForeignKey("IdArquivo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Arquivo");
-                });
-
-            modelBuilder.Entity("IntegraCTE.Core.Model.ArquivoModel", b =>
-                {
-                    b.Navigation("Validacoes");
                 });
 
             modelBuilder.Entity("IntegraCTE.Core.Model.TransportadoraModel", b =>

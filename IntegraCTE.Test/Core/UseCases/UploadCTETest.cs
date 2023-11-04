@@ -5,6 +5,7 @@ using IntegraCTE.Core.MapProfiles;
 using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.UseCases;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.AutoMock;
 
@@ -24,10 +25,10 @@ namespace IntegraCTE.Test.Core.UseCases
             }).CreateMapper();
         }
 
-        [Fact(DisplayName = "Irá retornar uma mensagem quando não houver planos com a espécie do bem e 30% da renda informada")]
+        [Fact()]
         public void Test1()
         {
-            var model = new ArquivoModel(id: Guid.NewGuid(), xML: "HAHAs", dataArquivo: DateTime.Now);
+            var model = new ArquivoModel(id: Guid.NewGuid(), xML: "HAHAs", dataArquivo: DateTime.Now, "CNX");
             var dto = new ArquivoDTO("HAHA");
 
             // Mock Mapper
@@ -35,6 +36,9 @@ namespace IntegraCTE.Test.Core.UseCases
             // Mock Repository
             _mocker.GetMock<IIntegraCTERepository>().Setup(s => s.Adicionar(model));
             _mocker.GetMock<IIntegraCTERepository>().Setup(s => s.SaveChangesAsync()).Returns(Task.FromResult(1));
+
+            // Mock IConfiguration
+            _mocker.GetMock<IConfiguration>().Setup(m => m.GetSection("ERPService:SiglaEmpresa").Value).Returns("");
 
             // Create Instance UC
             var useCase = _mocker.CreateInstance<UploadCTE>();

@@ -60,11 +60,22 @@ namespace IntegraCTE.Core.Model
 
         public string UFRemetente { get; set; }
 
+        public string ItemNumber { get; set; }
+        public int LineNumber { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public int PurchasePriceQuantity { get; set; }
+        public string CFOPCode { get; set; }
+        public string dataAreaId { get; set; }
+
 
         public DateTime DataArquivo { get; set; }
         public bool Integrado { get; set; }
         public DateTime? DataIntegracao { get; set; }
 
+        public void AddOrdemCompra(string ordemCompra)
+        {
+            OrdemCompra = ordemCompra;
+        }
 
     }
 }

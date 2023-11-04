@@ -1,10 +1,26 @@
 using IntegraCTE.Core.DTO;
+using IntegraCTE.Core.ValidationMessages;
+using System.Globalization;
 using System.Xml;
 
 namespace IntegraCTE.Core.Entity
 {
+
+    public class Linha
+    {
+        public string ItemNumber { get; internal set; }
+        public int LineNumber { get; internal set; }
+        public decimal PurchasePrice { get; internal set; }
+        public int PurchasePriceQuantity { get; internal set; }
+        public string CFOPCode { get; internal set; }
+        public string dataAreaId { get; internal set; }
+    }
     public class CTE
     {
+        private List<string> _mensagemValidacao = new List<string>();
+
+        private CultureInfo globalCulture { get; set; } = new CultureInfo("en-US");
+
         public Guid Id { get; set; }
         public string XML { get; set; }
         public List<Nota> Notas { get; set; }
@@ -47,17 +63,45 @@ namespace IntegraCTE.Core.Entity
 
         public string UFRemetente { get; private set; }
 
-        public void ProcessarXML()
+        public Linha Linha { get; private set; }
+
+        public bool HasValidation()
+        {
+            return _mensagemValidacao.Any();
+        }
+
+        public List<string> GetMessages()
+        {
+            return _mensagemValidacao;
+        }
+
+        public void PreencherLinha(string itemId, string dataAreaId)
+        {
+            const string cfop_MesmoEstado = "1.353";
+            const string cfop_OutroEstado = "2.353";
+
+            Linha = new()
+            {
+                ItemNumber = itemId,
+                LineNumber = 1,
+                PurchasePrice = decimal.Parse(this.ValorCte, globalCulture),
+                dataAreaId = dataAreaId.ToLower(),
+                PurchasePriceQuantity = 1,
+                CFOPCode = UFEmitente == UFRemetente ? cfop_MesmoEstado : cfop_OutroEstado
+            };
+        }
+
+        public void ProcessarXML(string dataAreaID)
         {
             Notas = new List<Nota>();
-            MontarCTePorXml(XML, "CNX");
+            MontarCTePorXml(XML, dataAreaID);
         }
 
         public void AdicionarDadosNotas(List<NotaDTO> dadnosNotas)
         {
             var notas = dadnosNotas.Select(s => new Nota() { ChaveNotaFical = s.ChaveNotaFical, NumeroNotaFical = s.NumeroNotaFical, SerieNotaFical = s.SerieNotaFical });
             Notas.AddRange(notas);
-            Site = dadnosNotas[0].Estabelecimento;
+            Site = dadnosNotas.FirstOrDefault()?.Estabelecimento;
         }
 
         public void AdicionarDadosTransportadora(TransportadoraDTO transportadoraDTO)
@@ -129,7 +173,7 @@ namespace IntegraCTE.Core.Entity
                         }
                         else
                         {
-                            throw ex;
+                            _mensagemValidacao.Add("Remetente CNPJ não encontrado");
                         }
                     }
                     foreach (XmlElement endReme in reme.GetElementsByTagName("enderReme"))
@@ -158,11 +202,14 @@ namespace IntegraCTE.Core.Entity
                             }
                             else
                             {
-                                throw ex;
+                                _mensagemValidacao.Add("Destinatario CNPJ não encontrado");
                             }
                         }
                     }
                 }
+
+                if (HasValidation())
+                    return;
 
                 foreach (XmlElement valor in dadosvalores)
                     ValorCte = valor.GetElementsByTagName("vRec")[0].InnerText.Trim();
@@ -235,6 +282,8 @@ namespace IntegraCTE.Core.Entity
             }
             catch (Exception ex)
             {
+                _mensagemValidacao.Add($"Erro ao processar o XML: '{ex.Message}'");
+                //
             }
         }
     }
