@@ -269,6 +269,10 @@ namespace IntegraCTE.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(100)");
 
+                    b.Property<string>("TipoMensagem")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(100)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdArquivo");

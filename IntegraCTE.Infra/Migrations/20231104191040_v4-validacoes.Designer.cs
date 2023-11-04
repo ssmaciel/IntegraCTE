@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegraCTE.Infra.Migrations
 {
     [DbContext(typeof(IntegraCTEContext))]
-    [Migration("20231104183339_v4-validacoes")]
+    [Migration("20231104191040_v4-validacoes")]
     partial class v4validacoes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -268,6 +268,10 @@ namespace IntegraCTE.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Mensagem")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(100)");
+
+                    b.Property<string>("TipoMensagem")
                         .IsRequired()
                         .HasColumnType("VARCHAR(100)");
 

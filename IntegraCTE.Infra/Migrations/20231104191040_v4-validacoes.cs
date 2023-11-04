@@ -15,7 +15,8 @@ namespace IntegraCTE.Infra.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdArquivo = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Mensagem = table.Column<string>(type: "VARCHAR(100)", nullable: false)
+                    Mensagem = table.Column<string>(type: "VARCHAR(100)", nullable: false),
+                    TipoMensagem = table.Column<string>(type: "VARCHAR(100)", nullable: false)
                 },
                 constraints: table =>
                 {
