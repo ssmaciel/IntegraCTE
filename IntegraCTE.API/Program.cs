@@ -85,7 +85,7 @@ builder.Services.AddTransient<ProcessarXMLCTE>();
 builder.Services.AddTransient<UploadCTE>();
 builder.Services.AddTransient<IntegrarCTE>();
 
-builder.Services.AddHostedService<WorkerProcessamentoXML>();
+//builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 builder.Services.AddResponseCaching();
 
