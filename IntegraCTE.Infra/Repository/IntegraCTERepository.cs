@@ -1,4 +1,5 @@
 ﻿using IntegraCTE.Core.Context;
+using IntegraCTE.Core.Entity;
 using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,11 @@ namespace IntegraCTE.Infra.Repository
         public async Task<CTEModel> BuscarCTE(Guid id)
         {
             return await _context.CTE.Include(x => x.Transportadora).SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<CTEModel>> BuscarCTEs()
+        {
+            return await _context.CTE.Include(x => x.Transportadora).ToListAsync();
         }
 
         public async Task<TransportadoraModel> BuscarTransportadoraPorCNPJ(string cnpj)

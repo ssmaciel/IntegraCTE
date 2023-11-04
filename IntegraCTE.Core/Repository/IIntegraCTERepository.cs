@@ -17,6 +17,8 @@ namespace IntegraCTE.Core.Repository
         Task<TransportadoraModel> BuscarTransportadoraPorCNPJ(string cnpj);
         Task<IEnumerable<Guid>> BuscarArquivosCTENProcessados();
         Task<CTEModel> BuscarCTE(Guid id);
+        Task<IEnumerable<ValidacaoModel>> BuscarValidacoesCTE(Guid idCte);
+        Task<IEnumerable<CTEModel>> BuscarCTEs();
         Task<int> SaveChangesAsync();
     }
 }
