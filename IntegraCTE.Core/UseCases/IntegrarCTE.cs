@@ -35,17 +35,30 @@ namespace IntegraCTE.Core.UseCases
             cteRequest.AdicionarTipoOperacao(tipo);
             cteRequest.AdicionarEmpresa(dataAreaId);
             var numeroOrdemCompra = await _service.EnviarCTE(cteRequest);
-            if (string.IsNullOrEmpty(numeroOrdemCompra))
-                return;
-
-            cteModel.AddOrdemCompra(numeroOrdemCompra);
+            if (!string.IsNullOrEmpty(numeroOrdemCompra))
+                cteModel.AddOrdemCompra(numeroOrdemCompra);
 
             if (!_validationMessage.HasValidation())
             {
                 cteModel.Integrado = true;
                 cteModel.DataIntegracao = DateTime.Now;
             }
+            else
+            {
+                await GerarValidacoes(cteModel.Id);
+            }
 
+            await _repository.SaveChangesAsync();
+        }
+
+        private async Task GerarValidacoes(Guid id)
+        {
+            var validacoesModel = _validationMessage.GetValidations().Select(s => new ValidacaoModel(id, s.Message, s.Type == ValidationType.Negocio ? "Negocio" : s.Type == ValidationType.ERP ? "ERP" : "Geral"));
+
+            foreach (var validacaoModel in validacoesModel)
+            {
+                await _repository.Adicionar(validacaoModel);
+            }
             await _repository.SaveChangesAsync();
         }
     }

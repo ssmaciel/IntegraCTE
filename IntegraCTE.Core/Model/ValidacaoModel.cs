@@ -12,24 +12,27 @@ namespace IntegraCTE.Core.Model
         public Guid IdArquivo { get; set; }
         public ArquivoModel Arquivo { get; set; }
         public string Mensagem { get; set; }
+        public string TipoMensagem { get; set; }
 
         protected ValidacaoModel()
         {
             
         }
 
-        public ValidacaoModel(Guid id, Guid idArquivo, string mensagem)
+        public ValidacaoModel(Guid id, Guid idArquivo, string mensagem, string tipoMensagem)
         {
             Id = id;
             IdArquivo = idArquivo;
             Mensagem = mensagem;
+            TipoMensagem = tipoMensagem;
         }
 
-        public ValidacaoModel(Guid idArquivo, string mensagem)
+        public ValidacaoModel(Guid idArquivo, string mensagem, string tipoMensagem)
         {
             Id = Guid.NewGuid();
             IdArquivo = idArquivo;
             Mensagem = mensagem;
+            TipoMensagem = tipoMensagem;
         }
     }
 }

@@ -5,6 +5,7 @@ using IntegraCTE.Core.Model;
 using IntegraCTE.Core.Repository;
 using IntegraCTE.Core.Services;
 using IntegraCTE.Core.ValidationMessages;
+using System.Linq;
 
 namespace IntegraCTE.Core.UseCases
 {
@@ -30,7 +31,10 @@ namespace IntegraCTE.Core.UseCases
             var config = await _service.BuscarParametrosIntegracaoCTE();
             cte.ProcessarXML(config.value[0].DataArea);
             if (cte.HasValidation())
+            {
+                GerarValidacoes(cte);
                 return;
+            }
 
             cte.PreencherLinha(config.value[0].ItemId, config.value[0].DataArea);
             var chave = $"'{cte.ChaveNotaFiscal.Remove(cte.ChaveNotaFiscal.Length-1).Replace(",", "','")}'";
@@ -58,6 +62,27 @@ namespace IntegraCTE.Core.UseCases
             var cteModel = _mapper.Map<CTEModel>(cte);
             arquivoModel.Processado = true;
             await _repository.Adicionar(cteModel);
+            await _repository.SaveChangesAsync();
+            if (_validationMessage.HasValidation())
+                await GerarValidacoes(cte.Id);
+        }
+
+        private async void GerarValidacoes(CTE cte)
+        {
+            foreach (var item in cte.GetMessages())
+                _validationMessage.AddMessage(item, ValidationType.Negocio);
+
+            await GerarValidacoes(cte.Id);
+        }
+
+        private async Task GerarValidacoes(Guid id)
+        {
+            var validacoesModel = _validationMessage.GetValidations().Select(s => new ValidacaoModel(id, s.Message, s.Type == ValidationType.Negocio ? "Negocio" : s.Type == ValidationType.ERP ? "ERP" : "Geral"));
+
+            foreach (var validacaoModel in validacoesModel)
+            {
+                await _repository.Adicionar(validacaoModel);
+            }
             await _repository.SaveChangesAsync();
         }
     }
