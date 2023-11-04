@@ -12,6 +12,7 @@ namespace IntegraCTE.Core.Context
         IQueryable<ArquivoModel> ArquivoCTE { get; }
         IQueryable<CTEModel> CTE { get; }
         IQueryable<TransportadoraModel> Transportadora { get; }
+        IQueryable<ValidacaoModel> Validacao { get; }
 
         Task Adicionar<T>(T t);
         Task Atualizar<T>(T t);

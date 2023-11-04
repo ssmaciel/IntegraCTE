@@ -34,6 +34,11 @@ namespace IntegraCTE.Infra.Repository
             await _context.Adicionar(transportadoraModel);
         }
 
+        public async Task Adicionar(ValidacaoModel validacaoModel)
+        {
+            await _context.Adicionar(validacaoModel);
+        }
+
         public async Task<ArquivoModel> BuscarArquivoCTE(Guid id)
         {
             return await _context.ArquivoCTE.SingleOrDefaultAsync(x => x.Id == id);

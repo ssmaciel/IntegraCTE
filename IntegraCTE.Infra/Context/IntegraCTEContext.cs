@@ -21,10 +21,13 @@ namespace IntegraCTE.Infra.Context
 
         public IQueryable<TransportadoraModel> Transportadora => TransportadoraDb;
 
-        
+        public IQueryable<ValidacaoModel> Validacao => ValidacaoDb;
+
+
         public DbSet<ArquivoModel> ArquivoCTEDb { get; set; }
         public DbSet<CTEModel> CTEDb { get; set; }
         public DbSet<TransportadoraModel> TransportadoraDb { get; set; }
+        public DbSet<ValidacaoModel> ValidacaoDb { get; set; }
 
         public async Task Adicionar<T>(T t)
         {
