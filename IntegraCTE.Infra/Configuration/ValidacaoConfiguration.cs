@@ -11,6 +11,8 @@ namespace IntegraCTE.Infra.Configuration
             builder.ToTable("Validacao");
             builder.HasKey(p => p.Id);
 
+            builder.Property(x => x.Mensagem).HasColumnType("TEXT");
+
             builder.HasOne(x => x.Arquivo)
                 .WithMany(x => x.Validacoes)
                 .HasPrincipalKey(x => x.Id)
