@@ -30,6 +30,11 @@ namespace IntegraCTE.Core.UseCases
             var cteRequest = _mapper.Map<CTERequest>(cteModel);
             cteRequest.PreencherPropriedades();
             var tipoOperacao = await _service.BuscarTipoOperacao();
+            if (_validationMessage.HasValidation())
+            {
+                await GerarValidacoes(cteModel.Id);
+                return;
+            }
             var tipo = tipoOperacao.value[0].RecId_PTR;
             var dataAreaId = tipoOperacao.value[0].dataAreaId;
             cteRequest.AdicionarTipoOperacao(tipo);

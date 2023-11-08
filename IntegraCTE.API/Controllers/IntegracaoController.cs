@@ -24,6 +24,11 @@ namespace IntegraCTE.API.Controllers
         public async Task<ActionResult> Post([FromServices] IntegrarCTE ucIntegrarCTE, [FromRoute] Guid id)
         {
             await ucIntegrarCTE.Execute(id);
+            if (_validationMessage.HasValidation())
+            {
+                return BadRequest(_validationMessage.GetValidations());
+
+            }
             return Ok();
         }
     }

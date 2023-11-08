@@ -45,7 +45,8 @@ namespace IntegraCTE.Infra.Services
                 }
                 catch (Exception ex)
                 {
-                    //this._Validation.Add("Erro na execução do oData: " + ex.Message);
+                    var message = "Erro na execução do Lookup oData: " + ex.Message;
+                    _validationMessage.AddMessage(message, ValidationType.ERP);
                     return null;
                 }
             }
@@ -66,7 +67,8 @@ namespace IntegraCTE.Infra.Services
             }
             catch (Exception ex)
             {
-                //this._Validation.Add("Erro na execução do oData: " + ex.Message);
+                var message = "Erro na execução do Lookup oData: " + ex.Message;
+                _validationMessage.AddMessage(message, ValidationType.ERP);
             }
             return Activator.CreateInstance<T>();
 
@@ -161,6 +163,7 @@ namespace IntegraCTE.Infra.Services
             catch (Exception ex)
             {
                 //this._Validation.Add(ex.Message);
+                _validationMessage.AddMessage("Erro ao Obter Cabecalho Autenticacao: " + ex.Message, ValidationType.ERP);
                 return null;
             }
         }

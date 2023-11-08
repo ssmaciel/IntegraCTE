@@ -47,6 +47,33 @@ namespace IntegraCTE.API.Controllers
                 return BadRequest(_validationMessage.GetValidations());
             }
         }
+        [HttpPost("upload-all")]
+        public async Task<ActionResult> PostAll([FromBody] UploadAllRequest request, [FromServices] UploadCTE ucUploadXML, [FromServices] ProcessarXMLCTE ucProcessarXML)
+        {
+            try
+            {
+                foreach (var xmlbase64 in request.ListXmlbase64)
+                {
+                    byte[] bytes = Convert.FromBase64String(xmlbase64);
+                    string xml = Encoding.UTF8.GetString(bytes);
+                    ArquivoDTO dto = new(xml);
+                    await ucUploadXML.Execute(dto);
+                    await ucProcessarXML.Execute(dto.Id);
+
+                }
+                if (_validationMessage.HasValidation())
+                {
+                    return BadRequest(_validationMessage.GetValidations());
+
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _validationMessage.AddMessage($"Erro não definido: {ex.Message}", ValidationType.Geral);
+                return BadRequest(_validationMessage.GetValidations());
+            }
+        }
 
         [HttpGet]
         public async Task<CTEModel> Get([FromServices] IIntegraCTERepository repository, Guid id) => await repository.BuscarCTE(id);
@@ -56,5 +83,11 @@ namespace IntegraCTE.API.Controllers
     {
         public string? Fatura { get; set; }
         public string Xmlbase64 { get; set; }
+    }
+
+    public class UploadAllRequest
+    {
+        public string? Fatura { get; set; }
+        public List<string> ListXmlbase64 { get; set; }
     }
 }

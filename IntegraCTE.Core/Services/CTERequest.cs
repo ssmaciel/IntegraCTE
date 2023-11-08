@@ -87,6 +87,7 @@ namespace IntegraCTE.Core.Services
             ConfirmedDeliveryDate = DateTime.Now;
             ExpectedCrossDockingDate = DateTime.Now;
             ExpectedStoreAvailableSalesDate = DateTime.Now;
+            InvoiceVendorAccountNumber = OrderVendorAccountNumber;
             LanguageId = "pt-BR";
         }
 
@@ -98,6 +99,13 @@ namespace IntegraCTE.Core.Services
         internal void AdicionarEmpresa(string dataAreaId)
         {
             Empresa = dataAreaId;
+        }
+
+        internal void AdicionaSite(string site)
+        {
+            var estabelecimento = Environment.GetEnvironmentVariable("DimensaoFinanceira").Replace("Estabelecimento", site);
+            DefaultLedgerDimensionDisplayValue = estabelecimento;
+            DefaultReceivingSiteId = site;
         }
     }
 
