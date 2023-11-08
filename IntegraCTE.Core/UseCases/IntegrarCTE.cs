@@ -39,6 +39,7 @@ namespace IntegraCTE.Core.UseCases
             var dataAreaId = tipoOperacao.value[0].dataAreaId;
             cteRequest.AdicionarTipoOperacao(tipo);
             cteRequest.AdicionarEmpresa(dataAreaId);
+            cteRequest.AdicionaSite(cteModel.Site);
             var numeroOrdemCompra = await _service.EnviarCTE(cteRequest);
             if (!string.IsNullOrEmpty(numeroOrdemCompra))
                 cteModel.AddOrdemCompra(numeroOrdemCompra);

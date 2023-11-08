@@ -8,6 +8,7 @@ services:
       dockerfile: IntegraCTE.API/Dockerfile
     environment:
        ConnectionStrings__CTEConnection: "Server=db;Database=IntegraCteDB;user id=sa;password=Password_01"
+       DimensaoFinanceira: "-Estabelecimento-----"
    
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
