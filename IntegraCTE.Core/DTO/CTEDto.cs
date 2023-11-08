@@ -17,5 +17,12 @@ namespace IntegraCTE.Core.DTO
         public DateTime? DataImportacao { get; set; }
         public string? OrdemCompra { get; set; }
         public string Status { get; set; }
+        public List<ValidacaoDTO>? Validacoes { get; set; }
+    }
+
+    public class ValidacaoDTO
+    {
+        public string Mensagem { get; set; }
+        public string TipoMensagem { get; set; }
     }
 }

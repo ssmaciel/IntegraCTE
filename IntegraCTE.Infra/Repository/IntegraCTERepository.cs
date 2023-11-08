@@ -65,6 +65,11 @@ namespace IntegraCTE.Infra.Repository
             return await _context.Transportadora.Where(x => x.Cnpj == cnpj).SingleOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<ValidacaoModel>> BuscarValidacoesCTE(Guid idCte)
+        {
+            return await _context.Validacao.Where(x => x.IdArquivo == idCte).ToListAsync();
+        }
+
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

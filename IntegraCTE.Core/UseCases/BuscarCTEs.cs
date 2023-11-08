@@ -42,7 +42,8 @@ namespace IntegraCTE.Core.UseCases
                     OrdemCompra = cteModel.OrdemCompra,
                     Site = cteModel.Site,
                     Valor = string.IsNullOrEmpty(cteModel.ValorCte) ? null : decimal.Parse(cteModel.ValorCte),
-                    Status = (cteModel.Integrado) ? "Integrado" : (validacoesModel.Any() && !cteModel.Integrado) ? "Erro" : (!validacoesModel.Any() && !cteModel.Integrado) ? "Pendente" : "Pendente"
+                    Status = (cteModel.Integrado) ? "Integrado" : (validacoesModel.Any() && !cteModel.Integrado) ? "Erro" : (!validacoesModel.Any() && !cteModel.Integrado) ? "Pendente" : "Pendente",
+                    Validacoes = validacoesModel.Select(x => new ValidacaoDTO { Mensagem = x.Mensagem, TipoMensagem = x.TipoMensagem }).ToList(),
                 };
                 retorno.Add(cteDTO);
             }

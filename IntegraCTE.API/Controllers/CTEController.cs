@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IntegraCTE.Core.UseCases;
 using IntegraCTE.Core.ValidationMessages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,10 @@ namespace IntegraCTE.API.Controllers
         }
 
         [HttpGet("ultimos")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get([FromServices] BuscarCTEs uc)
         {
-            await Task.Delay(1000);
-            return Ok();
+            var retorno = await uc.Execute();
+            return Ok(retorno);
         }
 
         [HttpGet("{id}")]

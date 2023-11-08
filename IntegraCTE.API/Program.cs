@@ -84,10 +84,22 @@ builder.Services.AddTransient<IERPService, ERPService>();
 builder.Services.AddTransient<ProcessarXMLCTE>();
 builder.Services.AddTransient<UploadCTE>();
 builder.Services.AddTransient<IntegrarCTE>();
+builder.Services.AddTransient<BuscarCTEs>();
 
 //builder.Services.AddHostedService<WorkerProcessamentoXML>();
 
 builder.Services.AddResponseCaching();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(b =>
+        b.SetIsOriginAllowed(_ => true)
+         .AllowAnyMethod()
+         .AllowAnyHeader()
+         .AllowCredentials()
+    );
+});
 
 var app = builder.Build();
 
@@ -97,6 +109,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
